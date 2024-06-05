@@ -1,6 +1,11 @@
 class Sprite {
   constructor({
-    position, velocity, image, frames = { max: 1 }, context, sprites,
+    position,
+    image,
+    frames = { max: 1, hold: 10 },
+    context,
+    sprites,
+    animate = false,
   }) {
     this.position = position;
     this.image = image;
@@ -11,7 +16,7 @@ class Sprite {
       this.width = this.image.width / this.frames.max;
       this.height = this.image.height;
     };
-    this.moving = false;
+    this.animate = animate;
     this.sprites = sprites;
   }
 
@@ -28,12 +33,12 @@ class Sprite {
       this.image.height,
     );
 
-    if (this.moving) {
+    if (this.animate) {
       if (this.frames.max > 1) {
         this.frames.elapsed += 1;
       }
-
-      if (this.frames.elapsed % 30 === 0) { // Нужно проверить ребятам скорость анимации.
+      // Нужно проверить ребятам скорость анимации.
+      if (this.frames.elapsed % this.frames.hold === 0) {
         if (this.frames.val < this.frames.max - 1) { // У меня почему-то в три раза больше значение
           this.frames.val += 1; // потребовалось, чем в уроке. Странно
         } else {
@@ -58,7 +63,7 @@ class Boundary {
   }
 
   draw() {
-    this.context.fillStyle = 'rgba(255, 0, 0, 0';
+    this.context.fillStyle = 'rgba(255, 0, 0, 0.5';
     this.context.fillRect(this.position.x, this.position.y, this.width, this.height);
   }
 }

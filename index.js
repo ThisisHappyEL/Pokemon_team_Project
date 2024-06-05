@@ -4,7 +4,6 @@ import battleZonesData from './src/battleZones.js';
 
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
-console.log(battleZonesData);
 
 canvas.width = 1024;
 canvas.height = 576;
@@ -92,6 +91,7 @@ const player = new Sprite({
   image: playerDownImage,
   frames: {
     max: 4,
+    hold: 30,
   },
   sprites: {
     up: playerUpImage,
@@ -151,7 +151,7 @@ const battle = {
 };
 
 function animate() { // функция, которая постоянно отрисовывает объекты для симуляции движения
-  window.requestAnimationFrame(animate);
+  const animbationId = window.requestAnimationFrame(animate);
   context.clearRect(0, 0, canvas.width, canvas.height); // Очистка холста перед перерисовкой
   background.draw(context);
   boundaries.forEach((boundary) => {
@@ -165,8 +165,9 @@ function animate() { // функция, которая постоянно отр
 
   // сегментик для остановки анимации ходьбы при срабатывании сражаения
   let moving = true;
-  player.moving = false;
+  player.animate = false;
 
+  console.log(animbationId)
   if (battle.initiated) return;
   /*
   Блок активации битвы
@@ -199,14 +200,35 @@ function animate() { // функция, которая постоянно отр
         && Math.random() < 0.01 // шанс начала сражения
       ) {
         console.log('activate battle');
+        window.cancelAnimationFrame(animbationId);
         battle.initiated = true;
+        // Настройки анимации из сторонеей библиотеки gsap
+        gsap.to('#overlappingDiv', {
+          opacity: 1,
+          repeat: 3,
+          yoyo: true,
+          duration: 0.4,
+          onComplete() {
+            gsap.to('#overlappingDiv', {
+              opacity: 1,
+              duration: 0.4,
+              onComplete() {
+                animateBattle();
+                gsap.to('#overlappingDiv', {
+                  opacity: 0,
+                  duration: 0.4,
+                });
+              },
+            });
+          },
+        });
         break;
       }
     }
   }
 
   if (keys.w.pressed && lastKey === 'w') {
-    player.moving = true;
+    player.animate = true;
     player.image = player.sprites.up;
 
     for (let i = 0; i < boundaries.length; i += 1) {
@@ -234,7 +256,7 @@ function animate() { // функция, которая постоянно отр
       });
     }
   } else if (keys.a.pressed && lastKey === 'a') {
-    player.moving = true;
+    player.animate = true;
     player.image = player.sprites.left;
 
     for (let i = 0; i < boundaries.length; i += 1) {
@@ -262,7 +284,7 @@ function animate() { // функция, которая постоянно отр
       });
     }
   } else if (keys.s.pressed && lastKey === 's') {
-    player.moving = true;
+    player.animate = true;
     player.image = player.sprites.down;
 
     for (let i = 0; i < boundaries.length; i += 1) {
@@ -290,7 +312,7 @@ function animate() { // функция, которая постоянно отр
       });
     }
   } else if (keys.d.pressed && lastKey === 'd') {
-    player.moving = true;
+    player.animate = true;
     player.image = player.sprites.right;
 
     for (let i = 0; i < boundaries.length; i += 1) {
@@ -320,7 +342,56 @@ function animate() { // функция, которая постоянно отр
   }
 }
 
-animate();
+// animate();
+
+const battleBackGroundImage = new Image();
+battleBackGroundImage.src = './assets/temporaryAssets/Images/battleBackground.png';
+const battleBackground = new Sprite({
+  position: {
+    x: 0,
+    y: 0,
+  },
+  image: battleBackGroundImage,
+});
+
+const draggleImage = new Image();
+draggleImage.src = './assets/temporaryAssets/Images/draggleSprite.png';
+const draggle = new Sprite({
+  position: {
+    x: 800,
+    y: 100,
+  },
+  image: draggleImage,
+  frames: {
+    max: 4,
+    hold: 60,
+  },
+  animate: true,
+});
+
+const embyImage = new Image();
+embyImage.src = './assets/temporaryAssets/Images/embySprite.png';
+const emby = new Sprite({
+  position: {
+    x: 280,
+    y: 325,
+  },
+  image: embyImage,
+  frames: {
+    max: 4,
+    hold: 60,
+  },
+  animate: true,
+});
+
+function animateBattle() {
+  window.requestAnimationFrame(animateBattle);
+  battleBackground.draw(context);
+  draggle.draw(context);
+  emby.draw(context);
+}
+
+animateBattle();
 
 const upButtons = ['w', 'ц', 'ArrowUp'];
 const leftButtons = ['a', 'ф', 'ArrowLeft'];
