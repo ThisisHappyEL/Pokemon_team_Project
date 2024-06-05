@@ -1,0 +1,28 @@
+{
+  "tabWidth": 2,
+  "useTabs": false,
+  "singleQuote": true,
+  "printWidth": 80,
+  "trailingComma": "es5",
+  "bracketSpacing": true,
+  "jsxBracketSameLine": false,
+  "parser": "html",
+  "endOfLine": "auto",
+  "overrides": [
+    {
+      "files": "package.json",
+      "options": {
+        "parser": "json",
+        "singleQuote": false,
+        "bracketSpacing": false,
+        "jsxBracketSameLine": true
+      }
+    },
+    {
+      "files": "package-lock.json",
+      "options": {
+        "parser": "json"
+      }
+    }
+  ]
+}
