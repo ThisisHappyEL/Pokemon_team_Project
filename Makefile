@@ -19,5 +19,5 @@ package-lock.json-fix:
 html-lint:
 	npx htmlhint index.html
 
-html-fix:`
+html-fix:
 	npx prettier --write index.html --config .prettierrc

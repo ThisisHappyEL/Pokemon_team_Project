@@ -1,7 +1,8 @@
 import { Sprite, Boundary } from './src/classes.js';
 import collisions from './src/collisions.js';
 import battleZonesData from './src/battleZones.js';
-import attacks from './src/attacks.js';
+import { animateBattle, initBattle } from './src/battleScene.js';
+import audio from './src/audio.js';
 
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
@@ -20,8 +21,6 @@ const battleZonesMap = [];
 for (let i = 0; i < battleZonesData.length; i += 70) {
   battleZonesMap.push(battleZonesData.slice(i, i + 70));
 }
-
-console.log(battleZonesMap);
 
 const boundaries = [];
 const offset = {
@@ -64,25 +63,23 @@ battleZonesMap.forEach((row, i) => {
   });
 });
 
-console.log(battleZones);
-
 const backgroundImage = new Image();
-backgroundImage.src = './assets/temporaryAssets/Images/Pellet Town.png';
+backgroundImage.src = './assets/Images/Pellet Town.png';
 
 const foregroundImage = new Image();
-foregroundImage.src = './assets/temporaryAssets/Images/foreground.png';
+foregroundImage.src = './assets/Images/foreground.png';
 
 const playerUpImage = new Image();
-playerUpImage.src = './assets/temporaryAssets/Images/playerUp.png';
+playerUpImage.src = './assets/Images/playerUp.png';
 
 const playerLeftImage = new Image();
-playerLeftImage.src = './assets/temporaryAssets/Images/playerLeft.png';
+playerLeftImage.src = './assets/Images/playerLeft.png';
 
 const playerDownImage = new Image();
-playerDownImage.src = './assets/temporaryAssets/Images/playerDown.png';
+playerDownImage.src = './assets/Images/playerDown.png';
 
 const playerRightImage = new Image();
-playerRightImage.src = './assets/temporaryAssets/Images/playerRight.png';
+playerRightImage.src = './assets/Images/playerRight.png';
 
 const player = new Sprite({
   position: {
@@ -166,7 +163,6 @@ function animate() { // функция, которая постоянно отр
   let moving = true;
   player.animate = false;
 
-  console.log(animbationId)
   if (battle.initiated) return;
   /*
   Блок активации битвы
@@ -198,8 +194,8 @@ function animate() { // функция, которая постоянно отр
         && overlappingArea > (player.width * player.height) / 2
         && Math.random() < 0.01 // шанс начала сражения
       ) {
-        console.log('activate battle');
         window.cancelAnimationFrame(animbationId);
+        audio.map.stop();
         battle.initiated = true;
         // Настройки анимации из сторонеей библиотеки gsap
         gsap.to('#overlappingDiv', {
@@ -212,6 +208,7 @@ function animate() { // функция, которая постоянно отр
               opacity: 1,
               duration: 0.4,
               onComplete() {
+                initBattle();
                 animateBattle();
                 gsap.to('#overlappingDiv', {
                   opacity: 0,
@@ -272,7 +269,6 @@ function animate() { // функция, которая постоянно отр
           },
         })
       ) {
-        console.log('colliding');
         moving = false;
         break;
       }
@@ -300,7 +296,6 @@ function animate() { // функция, которая постоянно отр
           },
         })
       ) {
-        console.log('colliding');
         moving = false;
         break;
       }
@@ -328,7 +323,6 @@ function animate() { // функция, которая постоянно отр
           },
         })
       ) {
-        console.log('colliding');
         moving = false;
         break;
       }
@@ -341,76 +335,7 @@ function animate() { // функция, которая постоянно отр
   }
 }
 
-// animate();
-
-const battleBackGroundImage = new Image();
-battleBackGroundImage.src = './assets/temporaryAssets/Images/battleBackground.png';
-const battleBackground = new Sprite({
-  position: {
-    x: 0,
-    y: 0,
-  },
-  image: battleBackGroundImage,
-});
-
-const draggleImage = new Image();
-draggleImage.src = './assets/temporaryAssets/Images/draggleSprite.png';
-const draggle = new Sprite({
-  position: {
-    x: 800,
-    y: 100,
-  },
-  image: draggleImage,
-  frames: {
-    max: 4,
-    hold: 60,
-  },
-  animate: true,
-  isEnemy: true,
-});
-
-const embyImage = new Image();
-embyImage.src = './assets/temporaryAssets/Images/embySprite.png';
-const emby = new Sprite({
-  position: {
-    x: 280,
-    y: 325,
-  },
-  image: embyImage,
-  frames: {
-    max: 4,
-    hold: 60,
-  },
-  animate: true,
-});
-
-const renderedSprites = [
-  draggle,
-  emby,
-];
-
-function animateBattle() {
-  window.requestAnimationFrame(animateBattle);
-  battleBackground.draw(context);
-
-  renderedSprites.forEach(sptrite => {
-    sptrite.draw(context);
-  });
-}
-
-animateBattle();
-
-// Прослушиватели для битвы
-document.querySelectorAll('button').forEach(button => {
-  button.addEventListener('click', (event) => {
-    const selectedAttack = attacks[event.currentTarget.innerHTML];
-    emby.attack({
-      attack: selectedAttack,
-      recipient: draggle,
-      renderedSprites,
-    });
-  });
-});
+animate();
 
 let lastKey = '';
 
@@ -432,8 +357,6 @@ window.addEventListener('keydown', ({ key }) => {
   } else if (rightButtons.includes(key)) {
     keys.d.pressed = true;
     lastKey = 'd';
-  } else {
-    console.log('не та кнопка');
   }
 });
 
@@ -446,7 +369,15 @@ window.addEventListener('keyup', ({ key }) => {
     keys.s.pressed = false;
   } else if (rightButtons.includes(key)) {
     keys.d.pressed = false;
-  } else {
-    console.log('не та кнопка');
   }
 });
+
+let clicked = false;
+addEventListener('click', () => {
+  if (!clicked) {
+    audio.Map.play();
+    clicked = true;
+  }
+});
+
+export { animate, battle };

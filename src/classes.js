@@ -6,23 +6,20 @@ class Sprite {
     context,
     sprites,
     animate = false,
-    isEnemy = false,
     rotation = 0,
   }) {
     this.position = position;
-    this.image = image;
+    this.image = new Image();
     this.frames = { ...frames, val: 0, elapsed: 0 };
-    this.context = context;
-
     this.image.onload = () => {
       this.width = this.image.width / this.frames.max;
       this.height = this.image.height;
     };
+    this.context = context;
+    this.image.src = image.src;
     this.animate = animate;
     this.sprites = sprites;
     this.opacity = 1;
-    this.health = 100;
-    this.isEnemy = isEnemy;
     this.rotation = rotation;
   }
 
@@ -65,8 +62,50 @@ class Sprite {
       }
     }
   }
+}
+
+class Monster extends Sprite {
+  constructor({
+    position,
+    image,
+    frames = { max: 1, hold: 10 },
+    context,
+    sprites,
+    animate = false,
+    rotation = 0,
+    isEnemy = false,
+    name,
+    attacks,
+  }) {
+    super({
+      position,
+      image,
+      frames,
+      context,
+      sprites,
+      animate,
+      rotation,
+    });
+    this.health = 100;
+    this.isEnemy = isEnemy;
+    this.name = name;
+    this.attacks = attacks;
+  }
+
+  faint() {
+    document.querySelector('#dialogueBox').innerHTML = `${this.name} fainted!`;
+    gsap.to(this.position, {
+      y: this.position.y + 20,
+    });
+    gsap.to(this, {
+      opacity: 0,
+    });
+  }
 
   attack({ attack, recipient, renderedSprites }) { // Анимации атаки и получения урона
+    document.querySelector('#dialogueBox').style.display = 'block';
+    document.querySelector('#dialogueBox').innerHTML = `${this.name} used ${attack.name}`;
+
     let healthBar = '#enemyHealthBar';
     if (this.isEnemy) {
       healthBar = '#playerHealthBar';
@@ -77,12 +116,12 @@ class Sprite {
       rotation = -2.2;
     }
 
-    this.health -= attack.damage;
+    recipient.health -= attack.damage;
 
     switch (attack.name) {
       case 'Fireball':
         const fireballImage = new Image();
-        fireballImage.src = './assets/temporaryAssets/Images/fireball.png';
+        fireballImage.src = './assets/Images/fireball.png';
         const fireball = new Sprite ({
           position: {
             x: this.position.x,
@@ -105,7 +144,7 @@ class Sprite {
           onComplete: () => {
             // Враг получает удар
             gsap.to(healthBar, {
-              width: this.health + '%',
+              width: recipient.health + '%',
             });
 
             gsap.to(recipient.position, {
@@ -143,7 +182,7 @@ class Sprite {
             onComplete: () => {
               // Враг получает удар
               gsap.to(healthBar, {
-                width: this.health + '%',
+                width: recipient.health + '%',
               });
 
               gsap.to(recipient.position, {
@@ -190,4 +229,4 @@ class Boundary {
   }
 }
 
-export { Sprite, Boundary };
+export { Sprite, Boundary, Monster };
