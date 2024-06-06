@@ -1,6 +1,7 @@
 import { Sprite, Boundary } from './src/classes.js';
 import collisions from './src/collisions.js';
 import battleZonesData from './src/battleZones.js';
+import attacks from './src/attacks.js';
 
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
@@ -131,8 +132,6 @@ const keys = {
     pressed: false,
   },
 };
-
-let lastKey = '';
 
 //  rectangle1 = player, rectangle2 = коллизии препятствий
 function rectangularCollision({ rectangle1, rectangle2 }) {
@@ -367,6 +366,7 @@ const draggle = new Sprite({
     hold: 60,
   },
   animate: true,
+  isEnemy: true,
 });
 
 const embyImage = new Image();
@@ -384,14 +384,35 @@ const emby = new Sprite({
   animate: true,
 });
 
+const renderedSprites = [
+  draggle,
+  emby,
+];
+
 function animateBattle() {
   window.requestAnimationFrame(animateBattle);
   battleBackground.draw(context);
-  draggle.draw(context);
-  emby.draw(context);
+
+  renderedSprites.forEach(sptrite => {
+    sptrite.draw(context);
+  });
 }
 
 animateBattle();
+
+// Прослушиватели для битвы
+document.querySelectorAll('button').forEach(button => {
+  button.addEventListener('click', (event) => {
+    const selectedAttack = attacks[event.currentTarget.innerHTML];
+    emby.attack({
+      attack: selectedAttack,
+      recipient: draggle,
+      renderedSprites,
+    });
+  });
+});
+
+let lastKey = '';
 
 const upButtons = ['w', 'ц', 'ArrowUp'];
 const leftButtons = ['a', 'ф', 'ArrowLeft'];

@@ -1,0 +1,7 @@
+{
+  "extends": ["stylelint-config-standard", "stylelint-config-prettier"],
+  "rules": {
+    "block-no-empty": null,
+    "unit-whitelist": ["em", "rem", "%", "s"]
+  }
+}
