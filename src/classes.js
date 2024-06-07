@@ -136,6 +136,8 @@ class Monster extends Sprite {
 
     recipient.health -= attack.damage;
 
+    if (recipient.health < 0) recipient.health = 0;
+
     switch (attack.name) {
       case 'Fireball': {
         audio.initFireball.play(); // проигрывание звука при касте

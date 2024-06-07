@@ -3,7 +3,7 @@
 
 import { Sprite, Monster } from './classes.js';
 import attacks from './attacks.js';
-import monsters from './monsters.js';
+import { allMonsters, playerMonsters } from './monsters.js';
 import { animate, battle } from '../index.js';
 import audio from './audio.js';
 
@@ -20,6 +20,16 @@ const battleBackground = new Sprite({
   image: battleBackGroundImage,
 });
 
+const enemyMonsterPosition = {
+  x: 1330,
+  y: 100,
+};
+
+const playerMonsterPosition = {
+  x: 450,
+  y: 450,
+};
+
 // множество параметров, которые необходимо заполнить при инициации боя
 let enemyMonster;
 let playerMonster;
@@ -28,99 +38,141 @@ let battleAnimationId;
 let queue;
 
 function initBattle() {
+  // Отображение и сокрытие панели выбора монстрика перед битвой
+  document.querySelector('#chooseMonstersPanel').style.display = 'block';
   document.querySelector('#userInterface').style.display = 'block'; // отображение интерфейса
   document.querySelector('#dialogueBox').style.display = 'none'; // отображение интерфейса диалогов
   document.querySelector('#enemyHealthBar').style.width = '100%'; // отображение здоровья врага
   document.querySelector('#playerHealthBar').style.width = '100%'; // отображение здоровья игрока
+  document.querySelector('#chooseMonstersBox').replaceChildren(); // перерисовка кнопок выбора
   document.querySelector('#attacksBox').replaceChildren(); // перерисовка кнопок атаки
 
-  enemyMonster = new Monster(monsters.Draggle); // определение врага
-  playerMonster = new Monster(monsters.Emby); // определение бойца игрока
-  renderedSprites = [enemyMonster, playerMonster]; // пул спрайтов для отрисовки
-  queue = []; // очередь действий
+  // Определение врага
+  enemyMonster = new Monster({
+    ...allMonsters.Maximba,
+    position: enemyMonsterPosition,
+    isEnemy: true,
+  });
+  renderedSprites = [enemyMonster]; // пул спрайтов для отрисовки
+  // имя монстра врага
+  document.querySelector('#enemyMonsterName').innerText = `Enemy ${enemyMonster.name}`;
 
-  playerMonster.attacks.forEach((attack) => { // заполнение интерфейса кнопками атак
-    const button = document.createElement('button'); // создание кнопки
-    button.innerHTML = attack.name; // название кнопки
-    document.querySelector('#attacksBox').append(button);
+  queue = []; // Очередь действий
+
+  // Заполнение панели выбора монстрика кнопками с ними
+  playerMonsters.forEach((name) => {
+    const pickMonsterButton = document.createElement('button'); // создание кнопки
+    pickMonsterButton.innerHTML = name; // название кнопки
+    document.querySelector('#chooseMonstersBox').append(pickMonsterButton);
   });
 
-  // Прослушиватели для битвы
-  document.querySelectorAll('button').forEach((button) => {
-    button.addEventListener('click', (event) => {
-      const selectedAttack = attacks[event.currentTarget.innerHTML];
-      playerMonster.attack({
-        attack: selectedAttack,
-        recipient: enemyMonster,
-        renderedSprites,
+  document.querySelectorAll('#chooseMonstersBox button').forEach((selectMonsterButton) => {
+    selectMonsterButton.addEventListener('click', (selectMonsterEvent) => {
+      const selectedMonsterName = selectMonsterEvent.target.innerText;
+      document.querySelector('#chooseMonstersPanel').style.display = 'none';
+
+      // Определение бойца игрока
+      playerMonster = new Monster({
+        ...allMonsters[selectedMonsterName],
+        position: playerMonsterPosition,
       });
+      renderedSprites.push(playerMonster); // добавление игрока в пул спрайтов для отрисовки
 
-      if (enemyMonster.health <= 0) { // Проверка на смээрть игрока
-        queue.push(() => {
-          enemyMonster.faint();
-        });
-        queue.push(() => {
-          // переход обратно на карту мира с затемнением
-          gsap.to('#overlappingDiv', {
-            opacity: 1,
-            onComplete: () => {
-              cancelAnimationFrame(battleAnimationId);
+      // имя монстра игрока
+      document.querySelector('#playerMonsterName').innerText = `Player ${playerMonster.name}`;
 
-              animate();
-              document.querySelector('#userInterface').style.display = 'none';
+      // Очистка и заполнение панели атак для выбранного монстра игрока
+      document.querySelector('#attacksBox').replaceChildren();
+      playerMonster.attacks.forEach((attack) => {
+        const button = document.createElement('button'); // создание кнопки
+        button.innerHTML = attack.name; // название кнопки
+        document.querySelector('#attacksBox').append(button);
+
+        // Добавление обработчиков событий для атак
+        button.addEventListener('click', (selectAttackEvent) => {
+          const selectedAttack = attacks[selectAttackEvent.currentTarget.innerHTML];
+          playerMonster.attack({
+            attack: selectedAttack,
+            recipient: enemyMonster,
+            renderedSprites,
+          });
+
+          if (enemyMonster.health <= 0) {
+            queue.push(() => {
+              enemyMonster.faint();
+            });
+            queue.push(() => {
+              // переход обратно на карту мира с затемнением
               gsap.to('#overlappingDiv', {
-                opacity: 0,
+                opacity: 1,
+                onComplete: () => {
+                  cancelAnimationFrame(battleAnimationId);
+
+                  animate();
+                  document.querySelector('#userInterface').style.display = 'none';
+                  gsap.to('#overlappingDiv', {
+                    opacity: 0,
+                  });
+
+                  battle.initiated = false;
+
+                  // добавление побежденного монстра в коллекцию игрока
+                  if (!playerMonsters.includes(enemyMonster.name)) {
+                    playerMonsters.push(enemyMonster.name);
+                    console.log(playerMonsters);
+                  }
+
+                  audio.map.play();
+                },
+              });
+            });
+          }
+
+          // Рандомизация атаки вражеского монстра
+          const randomAttack = enemyMonster.attacks[
+            Math.floor(Math.random() * enemyMonster.attacks.length)
+          ];
+
+          queue.push(() => {
+            enemyMonster.attack({
+              attack: randomAttack,
+              recipient: playerMonster,
+              renderedSprites,
+            });
+
+            if (playerMonster.health <= 0) {
+              queue.push(() => {
+                playerMonster.faint();
               });
 
-              battle.initiated = false;
-              audio.map.play();
-            },
-          });
-        });
-      }
-      // Рандомизация атаки вражеского монстра
-      const randomAttack = enemyMonster.attacks[
-        Math.floor(Math.random() * enemyMonster.attacks.length)
-      ];
-
-      queue.push(() => {
-        enemyMonster.attack({
-          attack: randomAttack,
-          recipient: playerMonster,
-          renderedSprites,
-        });
-
-        if (playerMonster.health <= 0) { // проверка на смэээрть врага
-          queue.push(() => {
-            playerMonster.faint();
-          });
-
-          queue.push(() => {
-            // переход обратно на карту мира с затемнением
-            gsap.to('#overlappingDiv', {
-              opacity: 1,
-              onComplete: () => {
-                cancelAnimationFrame(battleAnimationId);
-                animate();
-                document.querySelector('#userInterface').style.display = 'none';
+              queue.push(() => {
+                // переход обратно на карту мира с затемнением
                 gsap.to('#overlappingDiv', {
-                  opacity: 0,
+                  opacity: 1,
+                  onComplete: () => {
+                    cancelAnimationFrame(battleAnimationId);
+                    animate();
+                    document.querySelector('#userInterface').style.display = 'none';
+                    gsap.to('#overlappingDiv', {
+                      opacity: 0,
+                    });
+
+                    battle.initiated = false;
+                    audio.map.play();
+                  },
                 });
-
-                battle.initiated = false;
-                audio.map.play();
-              },
-            });
+              });
+            }
           });
-        }
-      });
-    });
+        });
 
-    // отслеживание нажатия кнопки атаки
-    button.addEventListener('mouseenter', (event) => {
-      const selectedAttack = attacks[event.currentTarget.innerHTML];
-      document.querySelector('#attackType').innerHTML = selectedAttack.type;
-      document.querySelector('#attackType').style.color = selectedAttack.color;
+        // отображение типа атаки
+        button.addEventListener('mouseenter', (mouseenterEvent) => {
+          const selectedAttack = attacks[mouseenterEvent.currentTarget.innerHTML];
+          document.querySelector('#attackType').innerHTML = selectedAttack.type;
+          document.querySelector('#attackType').style.color = selectedAttack.color;
+        });
+      });
     });
   });
 }
