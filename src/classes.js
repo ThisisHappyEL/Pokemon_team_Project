@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-param-reassign */
+
 import audio from './audio.js';
 
 class Sprite {
@@ -134,14 +137,14 @@ class Monster extends Sprite {
     recipient.health -= attack.damage;
 
     switch (attack.name) {
-      case 'Fireball': // попробовать перенести определение новых констант в другой файл или выше
+      case 'Fireball': {
         audio.initFireball.play(); // проигрывание звука при касте
         const fireballImage = new Image(); // создание спрайта для огенного шара
         fireballImage.src = './assets/Images/fireball.png';
         const fireball = new Sprite({
           position: {
-            x: this.position.x,
-            y: this.position.y,
+            x: this.position.x + 40, // точка появления огненного шара
+            y: this.position.y + 40, // снаряд игрока косо летит в цель? - этот параметр фиксить
           },
           image: fireballImage,
           frames: {
@@ -154,9 +157,9 @@ class Monster extends Sprite {
 
         renderedSprites.splice(1, 0, fireball);
 
-        gsap.to(fireball.position, { // анимация спрайта
-          x: recipient.position.x,
-          y: recipient.position.y,
+        gsap.to(fireball.position, { // выбор точки полёта проджект тайла (враг)
+          x: recipient.position.x + 40, // снаряд игрока косо летит в цель? - этот параметр фиксить
+          y: recipient.position.y + 40,
           onComplete: () => {
             // Враг получает удар
             audio.fireballHit.play(); // проигрывание звука при попадании
@@ -182,7 +185,8 @@ class Monster extends Sprite {
         });
 
         break;
-      case 'Tackle':
+      }
+      case 'Tackle': {
         const timeline = gsap.timeline();
 
         let movementDistance = 20;
@@ -222,6 +226,7 @@ class Monster extends Sprite {
             x: this.position.x,
           });
         break;
+      }
       default:
         console.log('Что-то не так');
     }

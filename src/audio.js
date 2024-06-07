@@ -1,3 +1,5 @@
+/* global Howl */
+// Это чтобы линтер не жаловался на Howl
 const audio = {
   map: new Howl({
     src: './assets/Audio/map.wav', // путь до музыки или звука

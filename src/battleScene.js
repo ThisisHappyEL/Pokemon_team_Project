@@ -1,3 +1,6 @@
+/* eslint-disable import/no-cycle */
+/* eslint-disable no-undef */
+
 import { Sprite, Monster } from './classes.js';
 import attacks from './attacks.js';
 import monsters from './monsters.js';
@@ -62,6 +65,7 @@ function initBattle() {
             opacity: 1,
             onComplete: () => {
               cancelAnimationFrame(battleAnimationId);
+
               animate();
               document.querySelector('#userInterface').style.display = 'none';
               gsap.to('#overlappingDiv', {
@@ -132,16 +136,18 @@ function animateBattle() {
 }
 
 // Отменить комментарий, при необходимости быстрой отладки боёв
-// initBattle();
-// animateBattle();
+initBattle();
+animateBattle();
 
 // логика для срабатывания клика по сообщению после атаки
 document.querySelector('#dialogueBox').addEventListener('click', (event) => {
+  const dialogueBox = event.currentTarget;
+
   if (queue.length > 0) {
     queue[0]();
     queue.shift();
   } else {
-    event.currentTarget.style.display = 'none';
+    dialogueBox.style.display = 'none';
   }
 });
 

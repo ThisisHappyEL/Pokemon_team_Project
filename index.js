@@ -1,3 +1,6 @@
+/* eslint-disable import/no-cycle */
+/* eslint-disable no-undef */
+
 import { Sprite, Boundary } from './src/classes.js';
 import collisions from './src/collisions.js';
 import battleZonesData from './src/battleZones.js';
@@ -150,6 +153,8 @@ const battle = { // состояние инициализации битвы
   initiated: false,
 };
 
+let lastKey = ''; // переменная с последней нажатой кнопкой движения
+
 function animate() { // функция, которая постоянно отрисовывает объекты для симуляции движения
   const animbationId = window.requestAnimationFrame(animate);
   context.clearRect(0, 0, canvas.width, canvas.height); // Очистка холста перед перерисовкой
@@ -256,7 +261,8 @@ function animate() { // функция, которая постоянно отр
 
     if (moving) {
       movables.forEach((movable) => {
-        movable.position.y += 2;
+        const mobility = movable;
+        mobility.position.y += 2;
       });
     }
   } else if (keys.a.pressed && lastKey === 'a') {
@@ -283,7 +289,8 @@ function animate() { // функция, которая постоянно отр
     }
     if (moving) {
       movables.forEach((movable) => {
-        movable.position.x += 2;
+        const mobility = movable;
+        mobility.position.x += 2;
       });
     }
   } else if (keys.s.pressed && lastKey === 's') {
@@ -310,7 +317,8 @@ function animate() { // функция, которая постоянно отр
     }
     if (moving) {
       movables.forEach((movable) => {
-        movable.position.y -= 2;
+        const mobility = movable;
+        mobility.position.y -= 2;
       });
     }
   } else if (keys.d.pressed && lastKey === 'd') {
@@ -337,16 +345,15 @@ function animate() { // функция, которая постоянно отр
     }
     if (moving) {
       movables.forEach((movable) => {
-        movable.position.x -= 2;
+        const mobility = movable;
+        mobility.position.x -= 2;
       });
     }
   }
 }
 
 // добавить комментарий, при необходимости быстрой отладки боёв (ну и снять его в battleScene.js)
-animate();
-
-let lastKey = ''; // переменная с последней нажатой кнопкой движения
+// animate();
 
 // Массивы с допустимыми для нажатиями кнопками движения
 const upButtons = ['w', 'ц', 'ArrowUp'];
