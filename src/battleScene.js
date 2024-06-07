@@ -136,8 +136,8 @@ function animateBattle() {
 }
 
 // Отменить комментарий, при необходимости быстрой отладки боёв
-initBattle();
-animateBattle();
+// initBattle();
+// animateBattle();
 
 // логика для срабатывания клика по сообщению после атаки
 document.querySelector('#dialogueBox').addEventListener('click', (event) => {
