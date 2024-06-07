@@ -13,20 +13,20 @@ const audio = {
     volume: 0.4,
   }),
   tackleHit: new Howl({
-    src: './assets/Audio/tackleHit.mp3',
+    src: './assets/Audio/tackleHit.wav',
     volume: 0.3,
   }),
   fireballHit: new Howl({
-    src: './assets/Audio/fireballHit.mp3',
-    volume: 0.2,
+    src: './assets/Audio/fireballHit.wav',
+    volume: 0.5,
   }),
   initFireball: new Howl({
-    src: './assets/Audio/initFireball.mp3',
+    src: './assets/Audio/initFireball.wav',
     volume: 0.3,
   }),
   victory: new Howl({
-    src: './assets/Audio/victory.mp3',
-    volume: 1,
+    src: './assets/Audio/victory.wav',
+    volume: 3,
   }),
 };
 

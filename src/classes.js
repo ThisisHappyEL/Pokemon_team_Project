@@ -1,3 +1,5 @@
+import audio from './audio.js';
+
 class Sprite {
   constructor({
     position,
@@ -100,6 +102,8 @@ class Monster extends Sprite {
     gsap.to(this, {
       opacity: 0,
     });
+    audio.battle.stop();
+    audio.victory.play();
   }
 
   attack({ attack, recipient, renderedSprites }) { // Анимации атаки и получения урона
@@ -120,9 +124,10 @@ class Monster extends Sprite {
 
     switch (attack.name) {
       case 'Fireball':
+        audio.initFireball.play();
         const fireballImage = new Image();
         fireballImage.src = './assets/Images/fireball.png';
-        const fireball = new Sprite ({
+        const fireball = new Sprite({
           position: {
             x: this.position.x,
             y: this.position.y,
@@ -133,7 +138,7 @@ class Monster extends Sprite {
             hold: 10,
           },
           animate: true,
-          rotation: rotation,
+          rotation,
         });
 
         renderedSprites.splice(1, 0, fireball);
@@ -143,8 +148,9 @@ class Monster extends Sprite {
           y: recipient.position.y,
           onComplete: () => {
             // Враг получает удар
+            audio.fireballHit.play();
             gsap.to(healthBar, {
-              width: recipient.health + '%',
+              width: `${recipient.health}%`,
             });
 
             gsap.to(recipient.position, {
@@ -181,8 +187,9 @@ class Monster extends Sprite {
             duration: 0.1,
             onComplete: () => {
               // Враг получает удар
+              audio.tackleHit.play();
               gsap.to(healthBar, {
-                width: recipient.health + '%',
+                width: `${recipient.health}%`,
               });
 
               gsap.to(recipient.position, {
@@ -224,7 +231,7 @@ class Boundary {
   }
 
   draw() {
-    this.context.fillStyle = 'rgba(255, 0, 0, 0.5';
+    this.context.fillStyle = 'rgba(255, 0, 0, 0.0';
     this.context.fillRect(this.position.x, this.position.y, this.width, this.height);
   }
 }

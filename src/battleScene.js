@@ -2,6 +2,7 @@ import { Sprite, Monster } from './classes.js';
 import attacks from './attacks.js';
 import monsters from './monsters.js';
 import { animate, battle } from '../index.js';
+import audio from './audio.js';
 
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
@@ -34,14 +35,14 @@ function initBattle() {
   renderedSprites = [draggle, emby];
   queue = [];
 
-  emby.attacks.forEach(attack => {
+  emby.attacks.forEach((attack) => {
     const button = document.createElement('button');
     button.innerHTML = attack.name;
     document.querySelector('#attacksBox').append(button);
   });
 
   // Прослушиватели для битвы
-  document.querySelectorAll('button').forEach(button => {
+  document.querySelectorAll('button').forEach((button) => {
     button.addEventListener('click', (event) => {
       const selectedAttack = attacks[event.currentTarget.innerHTML];
       emby.attack({
@@ -67,6 +68,7 @@ function initBattle() {
               });
 
               battle.initiated = false;
+              audio.map.play();
             },
           });
         });
@@ -101,6 +103,7 @@ function initBattle() {
                 });
 
                 battle.initiated = false;
+                audio.map.play();
               },
             });
           });
@@ -113,14 +116,14 @@ function initBattle() {
       document.querySelector('#attackType').innerHTML = selectedAttack.type;
       document.querySelector('#attackType').style.color = selectedAttack.color;
     });
-});
+  });
 }
 
 function animateBattle() {
   battleAnimationId = window.requestAnimationFrame(animateBattle);
   battleBackground.draw(context);
 
-  renderedSprites.forEach(sprite => {
+  renderedSprites.forEach((sprite) => {
     sprite.draw(context);
   });
 }
