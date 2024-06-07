@@ -1,21 +1,22 @@
 import attacks from './attacks.js';
 
+// Объект со всеми монстрами игры
 const monsters = {
-  Emby: {
-    position: {
-      x: 510,
+  Emby: { // родительский одного монстра
+    position: { // его позиция на боевой арене
+      x: 510, // конкретно такие параметры подходят для монстра игрока при стандартном масштабе
       y: 520,
     },
-    image: {
+    image: { // путь до изображения
       src: './assets/Images/embySprite.png',
     },
-    frames: {
+    frames: { // количество кадров анимации и скорость их смены
       max: 4,
       hold: 60,
     },
-    animate: true,
-    name: 'Emby',
-    attacks: [attacks.Tackle, attacks.Fireball],
+    animate: true, // является ли спрайт анимированных впринципе
+    name: 'Emby', // имя
+    attacks: [attacks.Tackle, attacks.Fireball], // пул аттак
   },
   Draggle: {
     position: {

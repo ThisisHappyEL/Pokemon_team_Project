@@ -4,10 +4,10 @@ import monsters from './monsters.js';
 import { animate, battle } from '../index.js';
 import audio from './audio.js';
 
-const canvas = document.querySelector('canvas');
-const context = canvas.getContext('2d');
+const canvas = document.querySelector('canvas'); // вырисовываемый блок
+const context = canvas.getContext('2d'); // контекст
 
-const battleBackGroundImage = new Image();
+const battleBackGroundImage = new Image(); // загрузка задника для арены
 battleBackGroundImage.src = './assets/Images/battleBackground.png';
 const battleBackground = new Sprite({
   position: {
@@ -17,8 +17,9 @@ const battleBackground = new Sprite({
   image: battleBackGroundImage,
 });
 
-let draggle;
-let emby;
+// множество параметров, которые необходимо заполнить при инициации боя
+let enemyMonster;
+let playerMonster;
 let renderedSprites;
 let battleAnimationId;
 let queue;
@@ -30,14 +31,14 @@ function initBattle() {
   document.querySelector('#playerHealthBar').style.width = '100%'; // отображение здоровья игрока
   document.querySelector('#attacksBox').replaceChildren(); // перерисовка кнопок атаки
 
-  draggle = new Monster(monsters.Draggle);
-  emby = new Monster(monsters.Emby);
-  renderedSprites = [draggle, emby];
-  queue = [];
+  enemyMonster = new Monster(monsters.Draggle); // определение врага
+  playerMonster = new Monster(monsters.Emby); // определение бойца игрока
+  renderedSprites = [enemyMonster, playerMonster]; // пул спрайтов для отрисовки
+  queue = []; // очередь действий
 
-  emby.attacks.forEach((attack) => {
-    const button = document.createElement('button');
-    button.innerHTML = attack.name;
+  playerMonster.attacks.forEach((attack) => { // заполнение интерфейса кнопками атак
+    const button = document.createElement('button'); // создание кнопки
+    button.innerHTML = attack.name; // название кнопки
     document.querySelector('#attacksBox').append(button);
   });
 
@@ -45,18 +46,18 @@ function initBattle() {
   document.querySelectorAll('button').forEach((button) => {
     button.addEventListener('click', (event) => {
       const selectedAttack = attacks[event.currentTarget.innerHTML];
-      emby.attack({
+      playerMonster.attack({
         attack: selectedAttack,
-        recipient: draggle,
+        recipient: enemyMonster,
         renderedSprites,
       });
 
-      if (draggle.health <= 0) {
+      if (enemyMonster.health <= 0) { // Проверка на смээрть игрока
         queue.push(() => {
-          draggle.faint();
+          enemyMonster.faint();
         });
         queue.push(() => {
-          // Назад во тьму
+          // переход обратно на карту мира с затемнением
           gsap.to('#overlappingDiv', {
             opacity: 1,
             onComplete: () => {
@@ -73,25 +74,25 @@ function initBattle() {
           });
         });
       }
-      // Вражеские атаки ниже
-      const randomAttack = draggle.attacks[
-        Math.floor(Math.random() * draggle.attacks.length)
+      // Рандомизация атаки вражеского монстра
+      const randomAttack = enemyMonster.attacks[
+        Math.floor(Math.random() * enemyMonster.attacks.length)
       ];
 
       queue.push(() => {
-        draggle.attack({
+        enemyMonster.attack({
           attack: randomAttack,
-          recipient: emby,
+          recipient: playerMonster,
           renderedSprites,
         });
 
-        if (emby.health <= 0) {
+        if (playerMonster.health <= 0) { // проверка на смэээрть врага
           queue.push(() => {
-            emby.faint();
+            playerMonster.faint();
           });
 
           queue.push(() => {
-            // Назад во тьму
+            // переход обратно на карту мира с затемнением
             gsap.to('#overlappingDiv', {
               opacity: 1,
               onComplete: () => {
@@ -111,6 +112,7 @@ function initBattle() {
       });
     });
 
+    // отслеживание нажатия кнопки атаки
     button.addEventListener('mouseenter', (event) => {
       const selectedAttack = attacks[event.currentTarget.innerHTML];
       document.querySelector('#attackType').innerHTML = selectedAttack.type;
@@ -119,6 +121,7 @@ function initBattle() {
   });
 }
 
+// непосредственно функция отрисовки и работы битвы
 function animateBattle() {
   battleAnimationId = window.requestAnimationFrame(animateBattle);
   battleBackground.draw(context);
@@ -128,9 +131,11 @@ function animateBattle() {
   });
 }
 
-initBattle();
-animateBattle();
+// Отменить комментарий, при необходимости быстрой отладки боёв
+// initBattle();
+// animateBattle();
 
+// логика для срабатывания клика по сообщению после атаки
 document.querySelector('#dialogueBox').addEventListener('click', (event) => {
   if (queue.length > 0) {
     queue[0]();

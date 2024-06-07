@@ -47,6 +47,7 @@ collisionsMap.forEach((row, i) => {
   });
 });
 
+// определение коллизий боевых зон на карте
 const battleZones = [];
 
 battleZonesMap.forEach((row, i) => {
@@ -65,6 +66,7 @@ battleZonesMap.forEach((row, i) => {
   });
 });
 
+// загрузка изображений карты мира, переднего плана и всех сторон спрайта игрока
 const backgroundImage = new Image();
 backgroundImage.src = './assets/Images/Pellet Town.png';
 
@@ -84,16 +86,16 @@ const playerRightImage = new Image();
 playerRightImage.src = './assets/Images/playerRight.png';
 
 const player = new Sprite({
-  position: {
+  position: { // стартовая точка игрока на карте. Сейчас это середина экрана
     x: canvas.width / 2,
     y: canvas.height / 2,
   },
-  image: playerDownImage,
+  image: playerDownImage, // адрес изображения
   frames: {
-    max: 4,
-    hold: 30,
+    max: 4, // количество спрайтов в спрайт листе
+    hold: 30, // скорость их смены
   },
-  sprites: {
+  sprites: { // пул спрайт-листов игрока
     up: playerUpImage,
     left: playerLeftImage,
     down: playerDownImage,
@@ -101,7 +103,7 @@ const player = new Sprite({
   },
 });
 
-const background = new Sprite({
+const background = new Sprite({ // создание карты мира
   position: {
     x: offset.x,
     y: offset.y,
@@ -109,7 +111,7 @@ const background = new Sprite({
   image: backgroundImage,
 });
 
-const foreground = new Sprite({
+const foreground = new Sprite({ // создание переднего плана
   position: {
     x: offset.x,
     y: offset.y,
@@ -117,7 +119,7 @@ const foreground = new Sprite({
   image: foregroundImage,
 });
 
-const keys = {
+const keys = { // объект нажатия кнопок. Меняется на true при нажатии
   w: {
     pressed: false,
   },
@@ -144,22 +146,22 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
 // Массив с объектами, симулирующими движ.
 const movables = [background, ...boundaries, foreground, ...battleZones];
 
-const battle = {
+const battle = { // состояние инициализации битвы
   initiated: false,
 };
 
 function animate() { // функция, которая постоянно отрисовывает объекты для симуляции движения
   const animbationId = window.requestAnimationFrame(animate);
   context.clearRect(0, 0, canvas.width, canvas.height); // Очистка холста перед перерисовкой
-  background.draw(context);
-  boundaries.forEach((boundary) => {
+  background.draw(context); // отрисовка карты мира
+  boundaries.forEach((boundary) => { // отрисовка коллизий препятствий
     boundary.draw(context);
   });
-  battleZones.forEach((battleZone) => {
+  battleZones.forEach((battleZone) => { // отрисовка коллизий боевых зон
     battleZone.draw();
   });
-  player.draw(context);
-  foreground.draw(context);
+  player.draw(context); // отрисовка спрайта персонажа
+  foreground.draw(context); // отриовка боевого задника
 
   // сегментик для остановки анимации ходьбы при срабатывании сражения
   let moving = true;
@@ -228,10 +230,10 @@ function animate() { // функция, которая постоянно отр
       }
     }
   }
-
+  // сегмент с проверкой нажатия кнопки и всеми последующими вещами
   if (keys.w.pressed && lastKey === 'w') {
-    player.animate = true;
-    player.image = player.sprites.up;
+    player.animate = true; // активация анимации
+    player.image = player.sprites.up; // смена спрайта персонажа
 
     for (let i = 0; i < boundaries.length; i += 1) {
       const boundary = boundaries[i];
@@ -341,7 +343,8 @@ function animate() { // функция, которая постоянно отр
   }
 }
 
-// animate();
+// добавить комментарий, при необходимости быстрой отладки боёв (ну и снять его в battleScene.js)
+animate();
 
 let lastKey = ''; // переменная с последней нажатой кнопкой движения
 

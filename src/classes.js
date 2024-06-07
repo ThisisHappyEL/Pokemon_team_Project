@@ -96,20 +96,23 @@ class Monster extends Sprite {
       scaleWidth,
       scaleHeight,
     });
-    this.health = 100;
-    this.isEnemy = isEnemy;
-    this.name = name;
-    this.attacks = attacks;
+    this.health = 100; // здоровье монстра. В текущей реализации у всех одинаковое
+    this.isEnemy = isEnemy; // определение того, вражеский ли монстр
+    this.name = name; // имя монстра
+    this.attacks = attacks; // пул атак
   }
 
+  // смэээрть
   faint() {
+    // сообщение о падении
     document.querySelector('#dialogueBox').innerHTML = `${this.name} fainted!`;
-    gsap.to(this.position, {
+    gsap.to(this.position, { // анимация падения
       y: this.position.y + 20,
     });
     gsap.to(this, {
       opacity: 0,
     });
+    // прекращение боевой и проигрывание победной. В текущей реализации победа - падение любого
     audio.battle.stop();
     audio.victory.play();
   }
@@ -123,17 +126,17 @@ class Monster extends Sprite {
       healthBar = '#playerHealthBar';
     }
 
-    let rotation = 1;
+    let rotation = 1; // поворот проджектайлов игрока в сторону врага
     if (this.isEnemy) {
-      rotation = -2.2;
+      rotation = -2.2; // поворот проджектайлов врага в сторону игрока
     }
 
     recipient.health -= attack.damage;
 
     switch (attack.name) {
-      case 'Fireball':
-        audio.initFireball.play();
-        const fireballImage = new Image();
+      case 'Fireball': // попробовать перенести определение новых констант в другой файл или выше
+        audio.initFireball.play(); // проигрывание звука при касте
+        const fireballImage = new Image(); // создание спрайта для огенного шара
         fireballImage.src = './assets/Images/fireball.png';
         const fireball = new Sprite({
           position: {
@@ -151,24 +154,24 @@ class Monster extends Sprite {
 
         renderedSprites.splice(1, 0, fireball);
 
-        gsap.to(fireball.position, {
+        gsap.to(fireball.position, { // анимация спрайта
           x: recipient.position.x,
           y: recipient.position.y,
           onComplete: () => {
             // Враг получает удар
-            audio.fireballHit.play();
+            audio.fireballHit.play(); // проигрывание звука при попадании
             gsap.to(healthBar, {
-              width: `${recipient.health}%`,
+              width: `${recipient.health}%`, // уменьшение здоровья
             });
 
-            gsap.to(recipient.position, {
+            gsap.to(recipient.position, { // анимация нанесения удара обидчиком
               x: recipient.position.x + 10,
               yoyo: true,
               repeat: 5,
               duration: 0.08,
             });
 
-            gsap.to(recipient, {
+            gsap.to(recipient, { // анимация получения удара жертвой
               opacity: 0,
               repeat: 5,
               yoyo: true,
