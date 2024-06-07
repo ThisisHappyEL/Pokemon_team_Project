@@ -1,11 +1,10 @@
 import attacks from './attacks.js';
 
-// По какой-то причине спрайт огонька не всегда появлется после перезагрузки. Надо разобраться.
 const monsters = {
   Emby: {
     position: {
-      x: 280,
-      y: 325,
+      x: 510,
+      y: 520,
     },
     image: {
       src: './assets/Images/embySprite.png',
@@ -20,8 +19,8 @@ const monsters = {
   },
   Draggle: {
     position: {
-      x: 800,
-      y: 100,
+      x: 1380,
+      y: 180,
     },
     image: {
       src: './assets/Images/draggleSprite.png',

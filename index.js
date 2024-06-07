@@ -7,8 +7,9 @@ import audio from './src/audio.js';
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 
-canvas.width = 1024;
-canvas.height = 576;
+// разрешение игры
+canvas.width = 1732;
+canvas.height = 852;
 
 // Создание подмассивов строк для карты коллизий
 // 70, потому что это количество плиток в одной строке карты мира в текущей реализации
@@ -17,15 +18,16 @@ for (let i = 0; i < collisions.length; i += 70) {
   collisionsMap.push(collisions.slice(i, i + 70));
 }
 
+// тоже самое, но для коллизий боевых зон
 const battleZonesMap = [];
 for (let i = 0; i < battleZonesData.length; i += 70) {
   battleZonesMap.push(battleZonesData.slice(i, i + 70));
 }
 
 const boundaries = [];
-const offset = {
-  x: -735,
-  y: -650,
+const offset = { // стартовая позиция игрока по отношению к координатам
+  x: -350,
+  y: -475,
 };
 
 // i - индекс строки. j - индекс символа(ячейки)
@@ -83,8 +85,8 @@ playerRightImage.src = './assets/Images/playerRight.png';
 
 const player = new Sprite({
   position: {
-    x: canvas.width / 2 - 192 / 4 / 2,
-    y: canvas.height / 2 - 68 / 2,
+    x: canvas.width / 2,
+    y: canvas.height / 2,
   },
   image: playerDownImage,
   frames: {
@@ -159,7 +161,7 @@ function animate() { // функция, которая постоянно отр
   player.draw(context);
   foreground.draw(context);
 
-  // сегментик для остановки анимации ходьбы при срабатывании сражаения
+  // сегментик для остановки анимации ходьбы при срабатывании сражения
   let moving = true;
   player.animate = false;
 
@@ -195,9 +197,11 @@ function animate() { // функция, которая постоянно отр
         && Math.random() < 0.01 // шанс начала сражения
       ) {
         window.cancelAnimationFrame(animbationId);
+
         audio.map.stop();
         audio.initBattle.play();
         audio.battle.play();
+
         battle.initiated = true;
         // Настройки анимации из сторонеей библиотеки gsap
         gsap.to('#overlappingDiv', {
@@ -337,15 +341,17 @@ function animate() { // функция, которая постоянно отр
   }
 }
 
-animate();
+// animate();
 
-let lastKey = '';
+let lastKey = ''; // переменная с последней нажатой кнопкой движения
 
+// Массивы с допустимыми для нажатиями кнопками движения
 const upButtons = ['w', 'ц', 'ArrowUp'];
 const leftButtons = ['a', 'ф', 'ArrowLeft'];
 const downButtons = ['s', 'ы', 'ArrowDown'];
 const rightButtons = ['d', 'в', 'ArrowRight'];
 
+// Нажиматель кнопок движения
 window.addEventListener('keydown', ({ key }) => {
   if (upButtons.includes(key)) {
     keys.w.pressed = true;
@@ -362,6 +368,7 @@ window.addEventListener('keydown', ({ key }) => {
   }
 });
 
+// Отжиматель кнопок движения
 window.addEventListener('keyup', ({ key }) => {
   if (upButtons.includes(key)) {
     keys.w.pressed = false;
@@ -374,6 +381,7 @@ window.addEventListener('keyup', ({ key }) => {
   }
 });
 
+// Воспроизводитель музыки
 let clicked = false;
 window.addEventListener('click', () => {
   if (!clicked) {

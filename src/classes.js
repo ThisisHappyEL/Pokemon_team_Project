@@ -2,18 +2,20 @@ import audio from './audio.js';
 
 class Sprite {
   constructor({
-    position,
-    image,
-    frames = { max: 1, hold: 10 },
-    context,
-    sprites,
-    animate = false,
-    rotation = 0,
+    position, // позиция отрисовки
+    image, // оригинальное изображение
+    frames = { max: 1, hold: 10 }, // количество спрайтов и время их сменяемости
+    context, // метаданные
+    sprites, // несколько спрайт листов (если необходимо)
+    animate = false, // анимируется ли спрайт
+    rotation = 0, // параметр вращения спрайта (полезно для проджект тайлов)
+    scaleWidth = 1, // масштабирование по ширине
+    scaleHeight = 1, // масштабирование по высоте
   }) {
     this.position = position;
     this.image = new Image();
-    this.frames = { ...frames, val: 0, elapsed: 0 };
-    this.image.onload = () => {
+    this.frames = { ...frames, value: 0, elapsed: 0 };
+    this.image.onload = () => { // загрузка изображения
       this.width = this.image.width / this.frames.max;
       this.height = this.image.height;
     };
@@ -23,6 +25,8 @@ class Sprite {
     this.sprites = sprites;
     this.opacity = 1;
     this.rotation = rotation;
+    this.scaleWidth = scaleWidth;
+    this.scaleHeight = scaleHeight;
   }
 
   draw(context) {
@@ -36,17 +40,17 @@ class Sprite {
       -this.position.x - this.width / 2,
       -this.position.y - this.height / 2,
     );
-    context.globalAlpha = this.opacity;
-    context.drawImage(
-      this.image,
-      this.frames.val * this.width,
-      0,
-      this.image.width / this.frames.max,
-      this.image.height,
-      this.position.x,
-      this.position.y,
-      this.image.width / this.frames.max,
-      this.image.height,
+    context.globalAlpha = this.opacity; // прозрачность
+    context.drawImage( // отрисовка
+      this.image, // адрес изображения по ссылке
+      this.frames.value * this.width, // Старт кадрирования по x. Важно для анимации спрайта
+      0, // Старт кадрирования по y
+      this.image.width / this.frames.max, // Конец кадрирования по x
+      this.image.height, // Конец кадрирования по y
+      this.position.x, // позиция x
+      this.position.y, // позиция y
+      (this.image.width / this.frames.max) * this.scaleWidth,
+      this.image.height * this.scaleHeight,
     );
     context.restore();
 
@@ -54,12 +58,12 @@ class Sprite {
       if (this.frames.max > 1) {
         this.frames.elapsed += 1;
       }
-      // Нужно проверить ребятам скорость анимации.
+
       if (this.frames.elapsed % this.frames.hold === 0) {
-        if (this.frames.val < this.frames.max - 1) { // У меня почему-то в три раза больше значение
-          this.frames.val += 1; // потребовалось, чем в уроке. Странно
+        if (this.frames.value < this.frames.max - 1) {
+          this.frames.value += 1;
         } else {
-          this.frames.val = 0;
+          this.frames.value = 0;
         }
       }
     }
@@ -78,6 +82,8 @@ class Monster extends Sprite {
     isEnemy = false,
     name,
     attacks,
+    scaleWidth = 1,
+    scaleHeight = 1,
   }) {
     super({
       position,
@@ -87,6 +93,8 @@ class Monster extends Sprite {
       sprites,
       animate,
       rotation,
+      scaleWidth,
+      scaleHeight,
     });
     this.health = 100;
     this.isEnemy = isEnemy;
@@ -217,7 +225,8 @@ class Monster extends Sprite {
   }
 }
 
-// 48, так как текущая карта состоит из тайлов размером 12 на 12 и увеличенные в 4 раза при экспорте
+// класс для плиточек коллизий
+// 48, так как карта состоит из тайлов размером 12 на 12 и увеличенные в 4 раза при экспорте
 class Boundary {
   static width = 48;
 
@@ -231,7 +240,7 @@ class Boundary {
   }
 
   draw() {
-    this.context.fillStyle = 'rgba(255, 0, 0, 0.0';
+    this.context.fillStyle = 'rgba(255, 0, 0, 0'; // цвет границ. Полезно для отладки
     this.context.fillRect(this.position.x, this.position.y, this.width, this.height);
   }
 }

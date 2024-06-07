@@ -26,7 +26,7 @@ const audio = {
   }),
   victory: new Howl({
     src: './assets/Audio/victory.wav',
-    volume: 3,
+    volume: 1,
   }),
 };
 

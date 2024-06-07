@@ -24,11 +24,11 @@ let battleAnimationId;
 let queue;
 
 function initBattle() {
-  document.querySelector('#userInterface').style.display = 'block';
-  document.querySelector('#dialogueBox').style.display = 'none';
-  document.querySelector('#enemyHealthBar').style.width = '100%';
-  document.querySelector('#playerHealthBar').style.width = '100%';
-  document.querySelector('#attacksBox').replaceChildren();
+  document.querySelector('#userInterface').style.display = 'block'; // отображение интерфейса
+  document.querySelector('#dialogueBox').style.display = 'none'; // отображение интерфейса диалогов
+  document.querySelector('#enemyHealthBar').style.width = '100%'; // отображение здоровья врага
+  document.querySelector('#playerHealthBar').style.width = '100%'; // отображение здоровья игрока
+  document.querySelector('#attacksBox').replaceChildren(); // перерисовка кнопок атаки
 
   draggle = new Monster(monsters.Draggle);
   emby = new Monster(monsters.Emby);
@@ -128,8 +128,8 @@ function animateBattle() {
   });
 }
 
-// initBattle();
-// animateBattle();
+initBattle();
+animateBattle();
 
 document.querySelector('#dialogueBox').addEventListener('click', (event) => {
   if (queue.length > 0) {
