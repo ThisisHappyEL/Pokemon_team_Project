@@ -153,7 +153,7 @@ function animate() { // функция, которая постоянно отр
   boundaries.forEach((boundary) => {
     boundary.draw(context);
   });
-  battleZones.forEach(battleZone => {
+  battleZones.forEach((battleZone) => {
     battleZone.draw();
   });
   player.draw(context);
@@ -196,6 +196,8 @@ function animate() { // функция, которая постоянно отр
       ) {
         window.cancelAnimationFrame(animbationId);
         audio.map.stop();
+        audio.initBattle.play();
+        audio.battle.play();
         battle.initiated = true;
         // Настройки анимации из сторонеей библиотеки gsap
         gsap.to('#overlappingDiv', {
@@ -373,9 +375,9 @@ window.addEventListener('keyup', ({ key }) => {
 });
 
 let clicked = false;
-addEventListener('click', () => {
+window.addEventListener('click', () => {
   if (!clicked) {
-    audio.Map.play();
+    audio.map.play();
     clicked = true;
   }
 });
