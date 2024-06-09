@@ -28,6 +28,6 @@ const allMonsters = {
   },
 };
 
-const playerMonsters = ['Somalma'];
+const playerMonsters = ['Somalma', 'Maximba', 'Maximba', 'Somalma', 'Somalma', 'Maximba', 'Maximba', 'Somalma'];
 
 export { allMonsters, playerMonsters };
