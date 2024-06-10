@@ -2,7 +2,7 @@
 // Это чтобы линтер не жаловался на Howl
 const audio = {
   map: new Howl({
-    src: './assets/Audio/map.wav', // путь до музыки или звука
+    src: './assets/Audio/ABeachTune.wav', // путь до музыки или звука
     html5: true,
     volume: 0.5, // громкость. менять по необходимости в диапозоне 0.1 - 1
   }),
@@ -11,7 +11,7 @@ const audio = {
     volume: 0.1,
   }),
   battle: new Howl({
-    src: './assets/Audio/battle.mp3',
+    src: './assets/Audio/Fighting.wav',
     volume: 0.4,
   }),
   tackleHit: new Howl({
