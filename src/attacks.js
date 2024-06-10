@@ -6,7 +6,7 @@ const attacks = {
     type: 'Normal', // текст для блока "Тип урона"
     color: 'black', // цвет текста в блоке "Тип урона"
     typeIcon: {
-      src: './assets/newImages/testIcon1.png',
+      src: './assets/newImages/icons/testIcon1.png',
     },
   },
   Fireball: {
@@ -15,7 +15,7 @@ const attacks = {
     type: 'Fire',
     color: 'red',
     typeIcon: {
-      src: './assets/newImages/testIcon2.png',
+      src: './assets/newImages/icons/testIcon2.png',
     },
   },
 };

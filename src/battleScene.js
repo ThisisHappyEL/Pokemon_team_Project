@@ -88,19 +88,12 @@ function initBattle() {
       iconContainer.append(attackIcon);
     });
 
-    let positionY;
-    if (name === 'Maximba') { // Так как высота спрайта Максима выше
-      positionY = 25;
-    } else {
-      positionY = -5;
-    }
-
     const localContext = canvasAnimationSprite.getContext('2d'); // контекст для работы кнопок
 
     const monster = new Monster({ // Создание объекта Monster для анимации спрайта
       position: {
         x: 0,
-        y: positionY,
+        y: 0,
       },
       image: { src: allMonsters[name].image.src },
       frames: allMonsters[name].frames,
@@ -127,7 +120,7 @@ function initBattle() {
 
     const buttonText = document.createElement('span'); // Создание элемента для текста
     buttonText.classList.add('buttonText');
-    buttonText.innerHTML = name; // Название кнопки
+    buttonText.innerHTML = allMonsters[name].name; // Название кнопки
 
     // Добавление контейнера с canvas и иконками и текста в кнопку
     pickMonsterButton.append(buttonContentContainer); // добавление кнопки
@@ -171,6 +164,7 @@ function initBattle() {
           if (enemyMonster.health <= 0) {
             queue.push(() => {
               enemyMonster.faint();
+              audio.victory.play();
             });
             queue.push(() => {
               // переход обратно на карту мира с затемнением
@@ -213,6 +207,7 @@ function initBattle() {
             if (playerMonster.health <= 0) {
               queue.push(() => {
                 playerMonster.faint();
+                audio.victory.play(); // СДЕЛАТЬ ПРОИГРЫШНУЮ КОГДА ОНА БУДЕТ ГОТОВА
               });
 
               queue.push(() => {
