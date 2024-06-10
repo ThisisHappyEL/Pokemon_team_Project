@@ -5,12 +5,18 @@ const attacks = {
     damage: 10, // наносимый урон
     type: 'Normal', // текст для блока "Тип урона"
     color: 'black', // цвет текста в блоке "Тип урона"
+    typeIcon: {
+      src: './assets/newImages/icons/testIcon1.png',
+    },
   },
   Fireball: {
     name: 'Fireball',
     damage: 25,
     type: 'Fire',
     color: 'red',
+    typeIcon: {
+      src: './assets/newImages/icons/testIcon2.png',
+    },
   },
 };
 

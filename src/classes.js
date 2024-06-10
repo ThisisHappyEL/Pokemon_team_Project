@@ -117,7 +117,6 @@ class Monster extends Sprite {
     });
     // прекращение боевой и проигрывание победной. В текущей реализации победа - падение любого
     audio.battle.stop();
-    audio.victory.play();
   }
 
   attack({ attack, recipient, renderedSprites }) { // Анимации атаки и получения урона

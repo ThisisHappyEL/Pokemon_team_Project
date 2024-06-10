@@ -4,7 +4,7 @@
 import { Sprite, Monster } from './classes.js';
 import attacks from './attacks.js';
 import { allMonsters, playerMonsters } from './monsters.js';
-import { animate, battle } from '../index.js';
+import { animate, battle } from './mainScene.js';
 import audio from './audio.js';
 
 const canvas = document.querySelector('canvas'); // вырисовываемый блок
@@ -59,16 +59,80 @@ function initBattle() {
 
   queue = []; // Очередь действий
 
-  // Заполнение панели выбора монстрика кнопками с ними
+  // Заполнение панели выбора монстрика кнопками и изображениями с ними
   playerMonsters.forEach((name) => {
     const pickMonsterButton = document.createElement('button'); // создание кнопки
-    pickMonsterButton.innerHTML = name; // название кнопки
+    pickMonsterButton.id = 'chooseMonsterButton'; // присвоение id для работы с стилями в css
+    pickMonsterButton.classList.add('monster-container'); // тоже самое, но с class
+    pickMonsterButton.setAttribute('data-name', name); // сохранить имя монстра в data-name
+
+    const buttonContentContainer = document.createElement('div'); // общий контейнер
+    buttonContentContainer.style.display = 'flex';
+    buttonContentContainer.style.alignItems = 'center';
+
+    const canvasAnimationSprite = document.createElement('canvas'); // Создание элемента для canvas
+    canvasAnimationSprite.id = 'monsterAnimBox'; // присвоение id для работы с стилями в css
+    canvasAnimationSprite.width = 200; // ширина canvas
+    canvasAnimationSprite.height = 175; // высота canvas
+
+    const iconContainer = document.createElement('div'); // создание контейнера для иконок
+    iconContainer.classList.add('icon-container'); // класс для стилизации
+
+    // Получаем атаки текущего монстра
+    const monsterAttacks = allMonsters[name].attacks;
+    monsterAttacks.forEach((attack) => {
+      const attackIconSrc = attack.typeIcon.src;
+      const attackIcon = document.createElement('img'); // создание элемента img для иконки атаки
+      attackIcon.src = attackIconSrc;
+      attackIcon.classList.add('attack-icon'); // Добавление класса для стилизации иконок
+      iconContainer.append(attackIcon);
+    });
+
+    const localContext = canvasAnimationSprite.getContext('2d'); // контекст для работы кнопок
+
+    const monster = new Monster({ // Создание объекта Monster для анимации спрайта
+      position: {
+        x: 0,
+        y: 0,
+      },
+      image: { src: allMonsters[name].image.src },
+      frames: allMonsters[name].frames,
+      context: localContext,
+      animate: true,
+      name,
+      attacks: monsterAttacks,
+    });
+
+    function animatePickMonsterSprite() { // Функция для анимации спрайта
+      localContext.clearRect( // очистка canvas
+        0,
+        0,
+        canvasAnimationSprite.width,
+        canvasAnimationSprite.height,
+      );
+      monster.draw(localContext); // отрисовка спрайта
+      requestAnimationFrame(animatePickMonsterSprite); // рекурсивный вызов для анимации
+    }
+    animatePickMonsterSprite(); // Запуск анимации
+
+    buttonContentContainer.append(canvasAnimationSprite); // добавление спрайта
+    buttonContentContainer.append(iconContainer); // добавление иконок
+
+    const buttonText = document.createElement('span'); // Создание элемента для текста
+    buttonText.classList.add('buttonText');
+    buttonText.innerHTML = allMonsters[name].name; // Название кнопки
+
+    // Добавление контейнера с canvas и иконками и текста в кнопку
+    pickMonsterButton.append(buttonContentContainer); // добавление кнопки
+    pickMonsterButton.append(buttonText); // добавление текста
+
+    // Добавление кнопки в контейнер
     document.querySelector('#chooseMonstersBox').append(pickMonsterButton);
   });
 
   document.querySelectorAll('#chooseMonstersBox button').forEach((selectMonsterButton) => {
     selectMonsterButton.addEventListener('click', (selectMonsterEvent) => {
-      const selectedMonsterName = selectMonsterEvent.target.innerText;
+      const selectedMonsterName = selectMonsterEvent.currentTarget.getAttribute('data-name');
       document.querySelector('#chooseMonstersPanel').style.display = 'none';
 
       // Определение бойца игрока
@@ -100,6 +164,7 @@ function initBattle() {
           if (enemyMonster.health <= 0) {
             queue.push(() => {
               enemyMonster.faint();
+              audio.victory.play();
             });
             queue.push(() => {
               // переход обратно на карту мира с затемнением
@@ -119,7 +184,6 @@ function initBattle() {
                   // добавление побежденного монстра в коллекцию игрока
                   if (!playerMonsters.includes(enemyMonster.name)) {
                     playerMonsters.push(enemyMonster.name);
-                    console.log(playerMonsters);
                   }
 
                   audio.map.play();
@@ -143,6 +207,7 @@ function initBattle() {
             if (playerMonster.health <= 0) {
               queue.push(() => {
                 playerMonster.faint();
+                audio.victory.play(); // СДЕЛАТЬ ПРОИГРЫШНУЮ КОГДА ОНА БУДЕТ ГОТОВА
               });
 
               queue.push(() => {
@@ -165,7 +230,6 @@ function initBattle() {
             }
           });
         });
-
         // отображение типа атаки
         button.addEventListener('mouseenter', (mouseenterEvent) => {
           const selectedAttack = attacks[mouseenterEvent.currentTarget.innerHTML];

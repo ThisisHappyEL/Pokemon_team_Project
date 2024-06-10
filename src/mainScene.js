@@ -1,11 +1,11 @@
 /* eslint-disable import/no-cycle */
 /* eslint-disable no-undef */
 
-import { Sprite, Boundary } from './src/classes.js';
-import collisions from './src/collisions.js';
-import battleZonesData from './src/battleZones.js';
-import { animateBattle, initBattle } from './src/battleScene.js';
-import audio from './src/audio.js';
+import { Sprite, Boundary } from './classes.js';
+import collisions from './collisions.js';
+import battleZonesData from './battleZones.js';
+import { animateBattle, initBattle } from './battleScene.js';
+import audio from './audio.js';
 
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');

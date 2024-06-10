@@ -4,35 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      * {
-        font-family: 'Press Start 2P';
-      }
-      body {
-        background-color: black;
-        margin: 4px;
-      }
-
-      h1 {
-        margin: 0;
-      }
-
-      button {
-        border: 0;
-        cursor: pointer;
-        font-size: 16px;
-      }
-
-      button:hover {
-        background-color: #ddd;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <!-- Игровой экран -->
@@ -54,6 +26,7 @@
 
       <canvas></canvas>
 
+      <!-- Менюшка выбора монстра -->
       <div
         id="chooseMonstersPanel"
         style="
@@ -69,6 +42,7 @@
           z-index: 1;
         "
       >
+      <!-- Панельки выбора монстров -->
         <div
         id="chooseMonstersBox"
         style="
@@ -84,6 +58,7 @@
       <div id="userInterface" style="display: none;">
       <!-- Показатель здоровья монстрика -->
       <div
+        class="healthBackground"
         style="
           background-color: #fce3e3;
           width: 250px;
@@ -108,6 +83,7 @@
               top: 0;
               left: 0;
               right: 0;
+              margin-top: 10px;
             "
           ></div>
         </div>
@@ -115,6 +91,7 @@
 
       <!-- Показатель здоровья монстрика игрока -->
       <div
+        class="healthBackground"
         style="
           background-color: #defaee;
           width: 250px;
@@ -139,6 +116,7 @@
               top: 0;
               left: 0;
               right: 0;
+              margin-top: 10px;
             "
           ></div>
         </div>
@@ -190,7 +168,7 @@
             border-left: 4px;
           "
         >
-          <h1 id="attackType" style="font-size: 16px">Attack Type</h1>
+          <h1 id="attackType">Attack Type</h1>
         </div>
       </div>
     </div>
