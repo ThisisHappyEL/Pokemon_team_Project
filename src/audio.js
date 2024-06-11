@@ -7,7 +7,7 @@ const audio = {
     volume: 0.5, // громкость. менять по необходимости в диапозоне 0.1 - 1
   }),
   initBattle: new Howl({
-    src: './assets/Audio/initBattle.wav',
+    src: './assets/Audio/StartFight.wav',
     volume: 0.1,
   }),
   battle: new Howl({
