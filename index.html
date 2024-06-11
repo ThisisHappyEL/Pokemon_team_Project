@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <!-- Игровой экран -->
@@ -42,142 +42,141 @@
           z-index: 1;
         "
       >
-      <!-- Панельки выбора монстров -->
+        <!-- Панельки выбора монстров -->
         <div
-        id="chooseMonstersBox"
-        style="
-          width: 100%;
-          height: 100%;
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          z-index: 2;
-        "
-      ></div>
-      </div>
-
-      <div id="userInterface" style="display: none;">
-      <!-- Показатель здоровья монстрика -->
-      <div
-        class="healthBackground"
-        style="
-          background-color: #fce3e3;
-          width: 250px;
-          position: absolute;
-          top: 50px;
-          left: 50px;
-          border: 4px black solid;
-          padding: 12px;
-        "
-      >
-        <h1 id="enemyMonsterName" style="font-size: 16px;">Draggle</h1>
-        <div style="position: relative">
-          <div
-            style="height: 5px; background-color: #ccc; margin-top: 10px"
-          ></div>
-          <div
-            id="enemyHealthBar"
-            style="
-              height: 5px;
-              background-color: green;
-              position: absolute;
-              top: 0;
-              left: 0;
-              right: 0;
-              margin-top: 10px;
-            "
-          ></div>
-        </div>
-      </div>
-
-      <!-- Показатель здоровья монстрика игрока -->
-      <div
-        class="healthBackground"
-        style="
-          background-color: #defaee;
-          width: 250px;
-          position: absolute;
-          bottom: 190px;
-          right: 50px;
-          border: 4px black solid;
-          padding: 12px;
-        "
-      >
-        <h1 id="playerMonsterName" style="font-size: 16px">Emby</h1>
-        <div style="position: relative">
-          <div
-            style="height: 5px; background-color: #ccc; margin-top: 10px"
-          ></div>
-          <div
-            id="playerHealthBar"
-            style="
-              height: 5px;
-              background-color: green;
-              position: absolute;
-              top: 0;
-              left: 0;
-              right: 0;
-              margin-top: 10px;
-            "
-          ></div>
-        </div>
-      </div>
-      <!-- Нижняя панель боевого экрана -->
-      <div
-        style="
-          background-color: white;
-          height: 140px;
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          border-top: 4px black solid;
-          display: flex;
-        "
-      >
-        <div
-          id="dialogueBox"
+          id="chooseMonstersBox"
           style="
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background-color: white;
-            padding: 12px;
-            display: none;
-            cursor: pointer;
-          "
-        >
-        </div>
-        <!-- Часть с ударами -->
-        <div
-          id="attacksBox"
-          style="
-            width: 66.66%;
+            width: 100%;
+            height: 100%;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
+            z-index: 2;
           "
         ></div>
-        <!-- Часть с типом аттак -->
+      </div>
+
+      <div id="userInterface" style="display: none">
+        <!-- Показатель здоровья монстрика -->
         <div
+          class="healthBackground"
           style="
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 33.33%;
-            border-left: 4px;
+            background-color: #fce3e3;
+            width: 250px;
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            border: 4px black solid;
+            padding: 12px;
           "
         >
-          <h1 id="attackType">Attack Type</h1>
+          <h1 id="enemyMonsterName" style="font-size: 16px">Draggle</h1>
+          <div style="position: relative">
+            <div
+              style="height: 5px; background-color: #ccc; margin-top: 10px"
+            ></div>
+            <div
+              id="enemyHealthBar"
+              style="
+                height: 5px;
+                background-color: green;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                margin-top: 10px;
+              "
+            ></div>
+          </div>
+        </div>
+
+        <!-- Показатель здоровья монстрика игрока -->
+        <div
+          class="healthBackground"
+          style="
+            background-color: #defaee;
+            width: 250px;
+            position: absolute;
+            bottom: 190px;
+            right: 50px;
+            border: 4px black solid;
+            padding: 12px;
+          "
+        >
+          <h1 id="playerMonsterName" style="font-size: 16px">Emby</h1>
+          <div style="position: relative">
+            <div
+              style="height: 5px; background-color: #ccc; margin-top: 10px"
+            ></div>
+            <div
+              id="playerHealthBar"
+              style="
+                height: 5px;
+                background-color: green;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                margin-top: 10px;
+              "
+            ></div>
+          </div>
+        </div>
+        <!-- Нижняя панель боевого экрана -->
+        <div
+          style="
+            background-color: white;
+            height: 140px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-top: 4px black solid;
+            display: flex;
+          "
+        >
+          <div
+            id="dialogueBox"
+            style="
+              position: absolute;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              background-color: white;
+              padding: 12px;
+              display: none;
+              cursor: pointer;
+            "
+          ></div>
+          <!-- Часть с ударами -->
+          <div
+            id="attacksBox"
+            style="
+              width: 66.66%;
+              display: grid;
+              grid-template-columns: repeat(2, 1fr);
+            "
+          ></div>
+          <!-- Часть с типом аттак -->
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 33.33%;
+              border-left: 4px;
+            "
+          >
+            <h1 id="attackType">Attack Type</h1>
+          </div>
         </div>
       </div>
     </div>
-  </div>
     <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
-    integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
+      src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
+      integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     ></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"

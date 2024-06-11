@@ -5,7 +5,7 @@
   src: url('./assets/Fonts/PressStart2P-Regular.ttf') format('truetype');
 }
 
-*:not(#monsterAnimBox):not(.icon-container):not(.healthBackground):not(.buttonText){
+*:not(#monsterAnimBox):not(.icon-container):not(.healthBackground):not(.buttonText):not(.instruction-window){
   font-family: 'Press Start 2P';
   width: 100%;
   height: 100%;
@@ -75,4 +75,53 @@ button:hover {
   height: 100%;
   width: 100%;
   text-align: center;
+}
+
+.instruction-window {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 20px;
+  width: 450px;
+  text-align: center;
+  color: #000; /* Добавление цвета текста для видимости */
+  box-sizing: border-box; /* Добавление box-sizing для корректного расчета размеров */
+}
+
+.instruction-window h2 {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+}
+
+.instruction-window p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.instruction-window ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0; /* Добавление отступов для списка */
+}
+
+.instruction-window li {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.close-button {
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px; /* Добавление отступа сверху для кнопки */
+}
+
+.close-button:hover {
+  background-color: #3e8e41;
 }

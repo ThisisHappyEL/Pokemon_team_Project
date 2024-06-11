@@ -18,6 +18,51 @@ const attacks = {
       src: './assets/newImages/icons/testIcon2.png',
     },
   },
+  Thunderbolt: {
+    name: 'Thunderbolt',
+    damage: 30,
+    type: 'Electric',
+    color: 'yellow',
+    typeIcon: {
+      src: './assets/newImages/icons/testIcon2.png',
+    },
+  },
+  Coconut: {
+    name: 'Coconut',
+    damage: 15,
+    type: 'Normal',
+    color: 'black',
+    typeIcon: {
+      src: './assets/newImages/icons/testIcon1.png',
+    },
+  },
+  Waterball: {
+    name: 'Waterball',
+    damage: 25,
+    type: 'Water',
+    color: 'blue',
+    typeIcon: {
+      src: './assets/newImages/icons/testIcon2.png',
+    },
+  },
+  java_Slash: {
+    name: 'java_Slash',
+    damage: 5,
+    type: 'Normal',
+    color: 'black',
+    typeIcon: {
+      src: './assets/newImages/icons/testIcon1.png',
+    },
+  },
+  poisonous_Spit: {
+    name: 'poisonous_Spit',
+    damage: 5,
+    type: 'Poison',
+    color: 'green',
+    typeIcon: {
+      src: './assets/newImages/icons/testIcon2.png',
+    },
+  },
 };
 
 export default attacks;
