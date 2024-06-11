@@ -37,8 +37,8 @@ class Sprite {
   draw(context) {
     context.save();
     context.globalAlpha = this.opacity;
-    const centerX = this.position.x + this.width * this.scaleWidth / 2;
-    const centerY = this.position.y + this.height * this.scaleHeight / 2;
+    const centerX = this.position.x + (this.width * this.scaleWidth) / 2;
+    const centerY = this.position.y + (this.height * this.scaleHeight) / 2;
     context.translate(centerX, centerY);
     context.rotate(this.rotation);
     context.translate(-centerX, -centerY);
