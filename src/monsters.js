@@ -36,7 +36,7 @@ const allMonsters = {
     },
     animate: true,
     name: 'Somatika',
-    attacks: [attacks.DarkArrow],
+    attacks: [attacks.Tackle, attacks.DarkArrow],
   },
   MikhAi_L: {
     image: {

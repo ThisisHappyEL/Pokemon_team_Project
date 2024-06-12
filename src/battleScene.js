@@ -48,7 +48,7 @@ function initBattle() {
   document.querySelector('#attacksBox').replaceChildren();
 
   enemyMonster = new Monster({
-    ...allMonsters.Somatika,
+    ...allMonsters.Somalma,
     position: enemyMonsterPosition,
     isEnemy: true,
   });
@@ -213,7 +213,7 @@ function initBattle() {
             if (playerMonster.health <= 0) {
               queue.push(() => {
                 playerMonster.faint();
-                audio.victory.play(); // СДЕЛАТЬ ПРОИГРЫШНУЮ КОГДА ОНА БУДЕТ ГОТОВА
+                audio.lose.play();
               });
 
               queue.push(() => {
@@ -256,8 +256,8 @@ function animateBattle() {
 }
 
 // Отменить комментарий, при необходимости быстрой отладки боёв
-initBattle();
-animateBattle();
+// initBattle();
+// animateBattle();
 
 // логика для срабатывания клика по сообщению после атаки
 document.querySelector('#dialogueBox').addEventListener('click', (event) => {

@@ -7,21 +7,20 @@ const audio = {
     volume: 0.2, // громкость. менять по необходимости в диапозоне 0.1 - 1
   }),
   initBattle: new Howl({
-<<<<<<< HEAD
-    src: './assets/Audio/StartFight.wav',
-    volume: 0.1,
-=======
     src: './assets/Audio/newAudio/StartFight.wav',
     volume: 0.5,
->>>>>>> origin
   }),
   battle: new Howl({
     src: './assets/Audio/newAudio/Fighting1.wav',
     volume: 0.2,
   }),
   victory: new Howl({
-    src: './assets/Audio/oldAudio/victory.wav',
-    volume: 1,
+    src: './assets/Audio/newAudio/Win1.wav',
+    volume: 0.3,
+  }),
+  lose: new Howl({
+    src: './assets/Audio/newAudio/LOSS.wav',
+    volume: 0.5,
   }),
   tackleHit: new Howl({
     src: './assets/Audio/oldAudio/tackleHit.wav',
