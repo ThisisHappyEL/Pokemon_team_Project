@@ -2,32 +2,45 @@
 // Это чтобы линтер не жаловался на Howl
 const audio = {
   map: new Howl({
-    src: './assets/Audio/ABeachTune.wav', // путь до музыки или звука
+    src: './assets/Audio/newAudio/ABeachTune.wav', // путь до музыки или звука
     html5: true,
-    volume: 0.5, // громкость. менять по необходимости в диапозоне 0.1 - 1
+    volume: 0.2, // громкость. менять по необходимости в диапозоне 0.1 - 1
   }),
   initBattle: new Howl({
+<<<<<<< HEAD
     src: './assets/Audio/StartFight.wav',
     volume: 0.1,
+=======
+    src: './assets/Audio/newAudio/StartFight.wav',
+    volume: 0.5,
+>>>>>>> origin
   }),
   battle: new Howl({
-    src: './assets/Audio/Fighting.wav',
-    volume: 0.4,
+    src: './assets/Audio/newAudio/Fighting1.wav',
+    volume: 0.2,
+  }),
+  victory: new Howl({
+    src: './assets/Audio/oldAudio/victory.wav',
+    volume: 1,
   }),
   tackleHit: new Howl({
-    src: './assets/Audio/tackleHit.wav',
+    src: './assets/Audio/oldAudio/tackleHit.wav',
+    volume: 0.3,
+  }),
+  initFireball: new Howl({
+    src: './assets/Audio/oldAudio/initFireball1.wav',
     volume: 0.3,
   }),
   fireballHit: new Howl({
-    src: './assets/Audio/fireballHit.wav',
+    src: './assets/Audio/oldAudio/fireballHit.wav',
     volume: 0.5,
   }),
-  initFireball: new Howl({
-    src: './assets/Audio/initFireball.wav',
-    volume: 0.3,
+  initCoconut: new Howl({
+    src: './assets/Audio/newAudio/coconutThrow/coconut_flight1.wav',
+    volume: 1,
   }),
-  victory: new Howl({
-    src: './assets/Audio/victory.wav',
+  coconutHit: new Howl({
+    src: './assets/Audio/newAudio/coconutThrow/coconut_punch.wav',
     volume: 1,
   }),
 };

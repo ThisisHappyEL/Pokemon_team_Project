@@ -38,118 +38,121 @@ let battleAnimationId;
 let queue;
 
 function initBattle() {
-  // Отображение и сокрытие панели выбора монстрика перед битвой
+  console.log('Initializing battle...');
   document.querySelector('#chooseMonstersPanel').style.display = 'block';
-  document.querySelector('#userInterface').style.display = 'block'; // отображение интерфейса
-  document.querySelector('#dialogueBox').style.display = 'none'; // отображение интерфейса диалогов
-  document.querySelector('#enemyHealthBar').style.width = '100%'; // отображение здоровья врага
-  document.querySelector('#playerHealthBar').style.width = '100%'; // отображение здоровья игрока
-  document.querySelector('#chooseMonstersBox').replaceChildren(); // перерисовка кнопок выбора
-  document.querySelector('#attacksBox').replaceChildren(); // перерисовка кнопок атаки
+  document.querySelector('#userInterface').style.display = 'block';
+  document.querySelector('#dialogueBox').style.display = 'none';
+  document.querySelector('#enemyHealthBar').style.width = '100%';
+  document.querySelector('#playerHealthBar').style.width = '100%';
+  document.querySelector('#chooseMonstersBox').replaceChildren();
+  document.querySelector('#attacksBox').replaceChildren();
 
-  // Определение врага
   enemyMonster = new Monster({
-    ...allMonsters.Maximba,
+    ...allMonsters.Somatika,
     position: enemyMonsterPosition,
     isEnemy: true,
   });
-  renderedSprites = [enemyMonster]; // пул спрайтов для отрисовки
-  // имя монстра врага
+  renderedSprites = [enemyMonster];
   document.querySelector('#enemyMonsterName').innerText = `Enemy ${enemyMonster.name}`;
 
-  queue = []; // Очередь действий
+  queue = [];
 
-  // Заполнение панели выбора монстрика кнопками и изображениями с ними
-  playerMonsters.forEach((name) => {
-    const pickMonsterButton = document.createElement('button'); // создание кнопки
-    pickMonsterButton.id = 'chooseMonsterButton'; // присвоение id для работы с стилями в css
-    pickMonsterButton.classList.add('monster-container'); // тоже самое, но с class
-    pickMonsterButton.setAttribute('data-name', name); // сохранить имя монстра в data-name
+  playerMonsters.forEach((monsterKey) => {
+    const monsterData = allMonsters[monsterKey];
+    console.log(`Creating button for monster: ${monsterData.name}`);
+    const pickMonsterButton = document.createElement('button');
+    pickMonsterButton.id = 'chooseMonsterButton';
+    pickMonsterButton.classList.add('monster-container');
+    pickMonsterButton.setAttribute('data-key', monsterKey);
 
-    const buttonContentContainer = document.createElement('div'); // общий контейнер
+    const buttonContentContainer = document.createElement('div');
     buttonContentContainer.style.display = 'flex';
     buttonContentContainer.style.alignItems = 'center';
 
-    const canvasAnimationSprite = document.createElement('canvas'); // Создание элемента для canvas
-    canvasAnimationSprite.id = 'monsterAnimBox'; // присвоение id для работы с стилями в css
-    canvasAnimationSprite.width = 200; // ширина canvas
-    canvasAnimationSprite.height = 175; // высота canvas
+    const canvasAnimationSprite = document.createElement('canvas');
+    canvasAnimationSprite.id = 'monsterAnimBox';
+    canvasAnimationSprite.width = 200;
+    canvasAnimationSprite.height = 175;
 
-    const iconContainer = document.createElement('div'); // создание контейнера для иконок
-    iconContainer.classList.add('icon-container'); // класс для стилизации
+    const iconContainer = document.createElement('div');
+    iconContainer.classList.add('icon-container');
 
-    // Получаем атаки текущего монстра
-    const monsterAttacks = allMonsters[name].attacks;
+    const monsterAttacks = monsterData.attacks;
     monsterAttacks.forEach((attack) => {
       const attackIconSrc = attack.typeIcon.src;
-      const attackIcon = document.createElement('img'); // создание элемента img для иконки атаки
+      const attackIcon = document.createElement('img');
       attackIcon.src = attackIconSrc;
-      attackIcon.classList.add('attack-icon'); // Добавление класса для стилизации иконок
+      attackIcon.classList.add('attack-icon');
       iconContainer.append(attackIcon);
     });
 
-    const localContext = canvasAnimationSprite.getContext('2d'); // контекст для работы кнопок
+    const localContext = canvasAnimationSprite.getContext('2d');
 
-    const monster = new Monster({ // Создание объекта Monster для анимации спрайта
+    const monster = new Monster({
       position: {
         x: 0,
         y: 0,
       },
-      image: { src: allMonsters[name].image.src },
-      frames: allMonsters[name].frames,
+      image: { src: monsterData.image.src },
+      frames: monsterData.frames,
       context: localContext,
       animate: true,
-      name,
+      name: monsterData.name,
       attacks: monsterAttacks,
+      flip: monsterData.flip,
     });
 
-    function animatePickMonsterSprite() { // Функция для анимации спрайта
-      localContext.clearRect( // очистка canvas
+    function animatePickMonsterSprite() {
+      localContext.clearRect(
         0,
         0,
         canvasAnimationSprite.width,
         canvasAnimationSprite.height,
       );
-      monster.draw(localContext); // отрисовка спрайта
-      requestAnimationFrame(animatePickMonsterSprite); // рекурсивный вызов для анимации
+      monster.draw(localContext);
+      requestAnimationFrame(animatePickMonsterSprite);
     }
-    animatePickMonsterSprite(); // Запуск анимации
+    animatePickMonsterSprite();
 
-    buttonContentContainer.append(canvasAnimationSprite); // добавление спрайта
-    buttonContentContainer.append(iconContainer); // добавление иконок
+    buttonContentContainer.append(canvasAnimationSprite);
+    buttonContentContainer.append(iconContainer);
 
-    const buttonText = document.createElement('span'); // Создание элемента для текста
+    const buttonText = document.createElement('span');
     buttonText.classList.add('buttonText');
-    buttonText.innerHTML = allMonsters[name].name; // Название кнопки
+    buttonText.innerHTML = monsterData.name;
 
-    // Добавление контейнера с canvas и иконками и текста в кнопку
-    pickMonsterButton.append(buttonContentContainer); // добавление кнопки
-    pickMonsterButton.append(buttonText); // добавление текста
+    pickMonsterButton.append(buttonContentContainer);
+    pickMonsterButton.append(buttonText);
 
-    // Добавление кнопки в контейнер
     document.querySelector('#chooseMonstersBox').append(pickMonsterButton);
   });
 
   document.querySelectorAll('#chooseMonstersBox button').forEach((selectMonsterButton) => {
     selectMonsterButton.addEventListener('click', (selectMonsterEvent) => {
-      const selectedMonsterName = selectMonsterEvent.currentTarget.getAttribute('data-name');
+      const selectedMonsterKey = selectMonsterEvent.currentTarget.getAttribute('data-key');
+      console.log(`Selected monster key: ${selectedMonsterKey}`);
+      console.log('allMonsters:', allMonsters);
+      console.log('Selected monster data:', allMonsters[selectedMonsterKey]);
+      if (!allMonsters[selectedMonsterKey]) {
+        console.error(`Monster key ${selectedMonsterKey} does not exist in allMonsters`);
+        return;
+      }
+
       document.querySelector('#chooseMonstersPanel').style.display = 'none';
 
-      // Определение бойца игрока
       playerMonster = new Monster({
-        ...allMonsters[selectedMonsterName],
+        ...allMonsters[selectedMonsterKey],
         position: playerMonsterPosition,
       });
-      renderedSprites.push(playerMonster); // добавление игрока в пул спрайтов для отрисовки
+      renderedSprites.push(playerMonster);
 
-      // имя монстра игрока
       document.querySelector('#playerMonsterName').innerText = `Player ${playerMonster.name}`;
 
       // Очистка и заполнение панели атак для выбранного монстра игрока
       document.querySelector('#attacksBox').replaceChildren();
       playerMonster.attacks.forEach((attack) => {
-        const button = document.createElement('button'); // создание кнопки
-        button.innerHTML = attack.name; // название кнопки
+        const button = document.createElement('button');
+        button.innerHTML = attack.name;
         document.querySelector('#attacksBox').append(button);
 
         // Добавление обработчиков событий для атак
@@ -167,12 +170,10 @@ function initBattle() {
               audio.victory.play();
             });
             queue.push(() => {
-              // переход обратно на карту мира с затемнением
               gsap.to('#overlappingDiv', {
                 opacity: 1,
                 onComplete: () => {
                   cancelAnimationFrame(battleAnimationId);
-
                   animate();
                   document.querySelector('#userInterface').style.display = 'none';
                   gsap.to('#overlappingDiv', {
@@ -181,9 +182,15 @@ function initBattle() {
 
                   battle.initiated = false;
 
-                  // добавление побежденного монстра в коллекцию игрока
-                  if (!playerMonsters.includes(enemyMonster.name)) {
-                    playerMonsters.push(enemyMonster.name);
+                  const enemyMonsterKey = Object.keys(allMonsters).find(
+                    (key) => allMonsters[key].name === enemyMonster.name,
+                  );
+
+                  if (!playerMonsters.includes(enemyMonsterKey)) {
+                    console.log(`Adding new monster to playerMonsters: ${enemyMonsterKey}`);
+                    playerMonsters.push(enemyMonsterKey);
+                  } else {
+                    console.log(`Monster already in playerMonsters: ${enemyMonsterKey}`);
                   }
 
                   audio.map.play();
@@ -192,7 +199,6 @@ function initBattle() {
             });
           }
 
-          // Рандомизация атаки вражеского монстра
           const randomAttack = enemyMonster.attacks[
             Math.floor(Math.random() * enemyMonster.attacks.length)
           ];
@@ -211,7 +217,6 @@ function initBattle() {
               });
 
               queue.push(() => {
-                // переход обратно на карту мира с затемнением
                 gsap.to('#overlappingDiv', {
                   opacity: 1,
                   onComplete: () => {
@@ -230,7 +235,6 @@ function initBattle() {
             }
           });
         });
-        // отображение типа атаки
         button.addEventListener('mouseenter', (mouseenterEvent) => {
           const selectedAttack = attacks[mouseenterEvent.currentTarget.innerHTML];
           document.querySelector('#attackType').innerHTML = selectedAttack.type;
@@ -252,8 +256,8 @@ function animateBattle() {
 }
 
 // Отменить комментарий, при необходимости быстрой отладки боёв
-// initBattle();
-// animateBattle();
+initBattle();
+animateBattle();
 
 // логика для срабатывания клика по сообщению после атаки
 document.querySelector('#dialogueBox').addEventListener('click', (event) => {
