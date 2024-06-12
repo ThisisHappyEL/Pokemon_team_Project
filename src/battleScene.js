@@ -38,6 +38,7 @@ let battleAnimationId;
 let queue;
 
 function initBattle() {
+  console.log('Initializing battle...');
   document.querySelector('#chooseMonstersPanel').style.display = 'block';
   document.querySelector('#userInterface').style.display = 'block';
   document.querySelector('#dialogueBox').style.display = 'none';
@@ -47,7 +48,7 @@ function initBattle() {
   document.querySelector('#attacksBox').replaceChildren();
 
   enemyMonster = new Monster({
-    ...allMonsters.JabbaScript,
+    ...allMonsters.Somatika,
     position: enemyMonsterPosition,
     isEnemy: true,
   });
@@ -56,11 +57,13 @@ function initBattle() {
 
   queue = [];
 
-  playerMonsters.forEach((name) => {
+  playerMonsters.forEach((monsterKey) => {
+    const monsterData = allMonsters[monsterKey];
+    console.log(`Creating button for monster: ${monsterData.name}`);
     const pickMonsterButton = document.createElement('button');
     pickMonsterButton.id = 'chooseMonsterButton';
     pickMonsterButton.classList.add('monster-container');
-    pickMonsterButton.setAttribute('data-name', name);
+    pickMonsterButton.setAttribute('data-key', monsterKey);
 
     const buttonContentContainer = document.createElement('div');
     buttonContentContainer.style.display = 'flex';
@@ -74,7 +77,7 @@ function initBattle() {
     const iconContainer = document.createElement('div');
     iconContainer.classList.add('icon-container');
 
-    const monsterAttacks = allMonsters[name].attacks;
+    const monsterAttacks = monsterData.attacks;
     monsterAttacks.forEach((attack) => {
       const attackIconSrc = attack.typeIcon.src;
       const attackIcon = document.createElement('img');
@@ -90,13 +93,13 @@ function initBattle() {
         x: 0,
         y: 0,
       },
-      image: { src: allMonsters[name].image.src },
-      frames: allMonsters[name].frames,
+      image: { src: monsterData.image.src },
+      frames: monsterData.frames,
       context: localContext,
       animate: true,
-      name,
+      name: monsterData.name,
       attacks: monsterAttacks,
-      flip: allMonsters[name].flip,
+      flip: monsterData.flip,
     });
 
     function animatePickMonsterSprite() {
@@ -116,7 +119,7 @@ function initBattle() {
 
     const buttonText = document.createElement('span');
     buttonText.classList.add('buttonText');
-    buttonText.innerHTML = allMonsters[name].name;
+    buttonText.innerHTML = monsterData.name;
 
     pickMonsterButton.append(buttonContentContainer);
     pickMonsterButton.append(buttonText);
@@ -126,11 +129,19 @@ function initBattle() {
 
   document.querySelectorAll('#chooseMonstersBox button').forEach((selectMonsterButton) => {
     selectMonsterButton.addEventListener('click', (selectMonsterEvent) => {
-      const selectedMonsterName = selectMonsterEvent.currentTarget.getAttribute('data-name');
+      const selectedMonsterKey = selectMonsterEvent.currentTarget.getAttribute('data-key');
+      console.log(`Selected monster key: ${selectedMonsterKey}`);
+      console.log('allMonsters:', allMonsters);
+      console.log('Selected monster data:', allMonsters[selectedMonsterKey]);
+      if (!allMonsters[selectedMonsterKey]) {
+        console.error(`Monster key ${selectedMonsterKey} does not exist in allMonsters`);
+        return;
+      }
+
       document.querySelector('#chooseMonstersPanel').style.display = 'none';
 
       playerMonster = new Monster({
-        ...allMonsters[selectedMonsterName],
+        ...allMonsters[selectedMonsterKey],
         position: playerMonsterPosition,
       });
       renderedSprites.push(playerMonster);
@@ -171,8 +182,15 @@ function initBattle() {
 
                   battle.initiated = false;
 
-                  if (!playerMonsters.includes(enemyMonster.name)) {
-                    playerMonsters.push(enemyMonster.name);
+                  const enemyMonsterKey = Object.keys(allMonsters).find(
+                    (key) => allMonsters[key].name === enemyMonster.name,
+                  );
+
+                  if (!playerMonsters.includes(enemyMonsterKey)) {
+                    console.log(`Adding new monster to playerMonsters: ${enemyMonsterKey}`);
+                    playerMonsters.push(enemyMonsterKey);
+                  } else {
+                    console.log(`Monster already in playerMonsters: ${enemyMonsterKey}`);
                   }
 
                   audio.map.play();
@@ -238,8 +256,8 @@ function animateBattle() {
 }
 
 // Отменить комментарий, при необходимости быстрой отладки боёв
-// initBattle();
-// animateBattle();
+initBattle();
+animateBattle();
 
 // логика для срабатывания клика по сообщению после атаки
 document.querySelector('#dialogueBox').addEventListener('click', (event) => {

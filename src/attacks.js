@@ -18,8 +18,8 @@ const attacks = {
       src: './assets/newImages/icons/testIcon2.png',
     },
   },
-  Thunderbolt: {
-    name: 'Thunderbolt',
+  Lightningbolt: {
+    name: 'Lightningbolt',
     damage: 30,
     type: 'Electric',
     color: 'yellow',
@@ -59,6 +59,24 @@ const attacks = {
     damage: 5,
     type: 'Poison',
     color: 'green',
+    typeIcon: {
+      src: './assets/newImages/icons/testIcon2.png',
+    },
+  },
+  DarkArrow: {
+    name: 'DarkArrow',
+    damage: 25,
+    type: 'Hypnosis',
+    color: 'purple',
+    typeIcon: {
+      src: './assets/newImages/icons/testIcon2.png',
+    },
+  },
+  Desintegrate: {
+    name: 'Desintegrate',
+    damage: 25,
+    type: 'Separation',
+    color: 'orange',
     typeIcon: {
       src: './assets/newImages/icons/testIcon2.png',
     },

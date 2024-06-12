@@ -414,6 +414,49 @@ class Monster extends Sprite {
         break;
       }
       case 'java_Slash': {
+        audio.tackleHit.play(); // Проигрывание звука при атаке
+        gsap.to(healthBar, {
+          width: `${recipient.health}%`, // Уменьшение здоровья
+        });
+
+        // Анимация подпрыгивания
+        gsap.to(this.position, {
+          y: this.position.y - 200, // Подпрыгивание
+          duration: 0.1,
+          yoyo: true,
+          repeat: 1,
+          onComplete: () => {
+            // Создаем спрайт javaSlash
+            const javaSlashImage = new Image();
+            javaSlashImage.src = './assets/newImages/jabba script/java slash.png';
+            const javaSlash = new Sprite({
+              position: {
+                x: recipient.position.x - 70, // Увеличение смещения влево
+                y: recipient.position.y + 20, // Позиция Y врага с учетом смещения вниз
+              },
+              image: javaSlashImage,
+              frames: {
+                max: 4,
+                hold: 10,
+              },
+              animate: true,
+              scaleHeight: 5,
+              scaleWidth: 5,
+            });
+
+            // Добавляем спрайт javaSlash
+            renderedSprites.push(javaSlash);
+
+            // Удаляем спрайт javaSlash после завершения анимации удара
+            setTimeout(() => {
+              renderedSprites.pop();
+            }, 300); // Продолжительность анимации удара
+          },
+        });
+
+        break;
+      }
+      case 'Lightningbolt': {
         const timeline = gsap.timeline();
 
         let movementDistance = 80;
@@ -427,14 +470,30 @@ class Monster extends Sprite {
           rotation = 0;
         }
 
-        // Жабка берет разгон
+        // Анимация нервного покачивания
         timeline.to(this.position, {
-          x: this.position.x - movementDistance * 6,
-          y: this.position.y + movementDistance * 2,
-          duration: 0.5,
+          x: this.position.x + 5,
+          y: this.position.y - 5,
+          duration: 0.1,
+          yoyo: true,
+          repeat: 5,
+          ease: 'power1.inOut',
         });
 
-        // Жабка бежит на стартовую позицию
+        timeline.to(this.position, {
+          y: this.position.y - (this.isEnemy ? -movementDistance * 2 : movementDistance * 2),
+          duration: 0.2,
+          ease: 'power2.out',
+        });
+
+        // Добавляем возврат в исходное положение
+        timeline.to(this.position, {
+          y: this.position.y,
+          duration: 0.2,
+          ease: 'power2.in',
+        });
+
+        // Максимба бежит на стартовую позицию
         timeline.to(this.position, {
           x: this.position.x,
           y: this.position.y,
@@ -444,39 +503,195 @@ class Monster extends Sprite {
             gsap.to(healthBar, {
               width: `${recipient.health}%`, // уменьшение здоровья
             });
-            // Создаем спрайт удара
-            const javaSlashImage = new Image();
-            javaSlashImage.src = './assets/newImages/jabba script/java slash.png';
-            const javaSlash = new Sprite({
+
+            // Создаем спрайт Lightningbolt
+            const LightningboltImage = new Image();
+            LightningboltImage.src = './assets/newImages/maximba/lightningbolt.png';
+            const Lightningbolt = new Sprite({
               position: {
-                x: this.position.x,
-                y: this.position.y,
+                x: this.position.x + (this.isEnemy ? 40 : 0),
+                y: this.position.y + 40,
               },
-              image: javaSlashImage,
+              image: LightningboltImage,
               frames: {
                 max: 4,
                 hold: 10,
               },
               animate: true,
               rotation,
-              scaleHeight: 5,
-              scaleWidth: 5,
+              scaleHeight: 2.5, // уменьшенный размер по высоте
+              scaleWidth: 2.5, // уменьшенный размер по ширине
             });
 
-            // Добавляем спрайт удара
-            renderedSprites.push(javaSlash);
+            // Добавляем спрайт Lightningbolt
+            renderedSprites.push(Lightningbolt);
 
-            // Анимация удара
-            gsap.to(javaSlash.position, {
-              x: this.position.x + (this.isEnemy ? -0 : 0),
-              y: this.position.y - (this.isEnemy ? -0 : 0),
-              duration: 0.3,
+            // Анимация движения Lightningbolt к врагу
+            gsap.to(Lightningbolt.position, {
+              x: recipient.position.x + (this.isEnemy ? 60 : 0),
+              y: recipient.position.y + (this.isEnemy ? 30 : 30),
+              duration: 0.5,
               onComplete: () => {
-                renderedSprites.pop(); // Удаляем спрайт удара после завершения
+                renderedSprites.pop(); // Удаляем спрайт после завершения
               },
             });
           },
         });
+
+        break;
+      }
+
+      case 'DarkArrow': {
+        const startX = this.position.x;
+        const startY = this.position.y;
+        const radiusX = 120;
+        const radiusY = 60;
+
+        if (this.isEnemy) {
+          rotation = 3;
+        } else {
+          rotation = 0;
+        }
+
+        // Путь в форме знака бесконечности
+        const path = [
+          { x: startX, y: startY },
+          { x: startX - radiusX, y: startY - radiusY },
+          { x: startX - 2 * radiusX, y: startY },
+          { x: startX - radiusX, y: startY + radiusY },
+          { x: startX, y: startY },
+          { x: startX + radiusX, y: startY + radiusY },
+          { x: startX + 2 * radiusX, y: startY },
+          { x: startX + radiusX, y: startY - radiusY },
+          { x: startX, y: startY },
+        ];
+
+        gsap.registerPlugin(MotionPathPlugin);
+
+        // Анимация движения по траектории знака бесконечности
+        const animateAttack = gsap.to(this.position, {
+          duration: 4, // Продолжительность анимации
+          repeat: -1,
+          motionPath: {
+            path,
+            curviness: 1.25,
+            autoRotate: true,
+          },
+          ease: 'power1.inOut',
+          paused: true,
+        });
+
+        // Запускаем анимацию при начале атаки
+        animateAttack.play();
+
+        // Воспроизведение звука при попадании и обновление healthBar
+        gsap.delayedCall(4, () => { // Задержка на время длительности анимации
+          audio.tackleHit.play(); // Проигрывание звука при попадании
+          gsap.to(healthBar, {
+            width: `${recipient.health}%`, // Уменьшение здоровья
+          });
+
+          // Создаем спрайт DarkArrow
+          const DarkArrowImage = new Image();
+          DarkArrowImage.src = './assets/newImages/somatika/dark arrow.png';
+          const DarkArrow = new Sprite({
+            position: {
+              x: this.position.x,
+              y: this.position.y + 40,
+            },
+            image: DarkArrowImage,
+            frames: {
+              max: 4,
+              hold: 10,
+            },
+            animate: true,
+            rotation,
+            scaleHeight: 2,
+            scaleWidth: 2,
+          });
+
+          renderedSprites.push(DarkArrow);
+
+          gsap.to(DarkArrow.position, {
+            x: recipient.position.x,
+            y: recipient.position.y,
+            duration: 0.5,
+            onComplete: () => {
+              renderedSprites.pop();
+
+              animateAttack.pause();
+
+              // Возвращаем персонажа в исходную позицию
+              gsap.to(this.position, {
+                x: startX,
+                y: startY,
+                duration: 1,
+                ease: 'power2.inOut',
+              });
+            },
+          });
+        });
+
+        break;
+      }
+
+      case 'Desintegrate': {
+        audio.tackleHit.play(); // проигрывание звука при попадании
+        gsap.to(healthBar, {
+          width: `${recipient.health}%`, // уменьшение здоровья
+        });
+
+        // Создаем спрайт Desintegrate
+        const DesintegrateImage = new Image();
+        DesintegrateImage.src = './assets/newImages/mikh ai-l/desintegrate.png';
+
+        DesintegrateImage.onload = () => {
+          const Desintegrate = new Sprite({
+            position: {
+              x: recipient.position.x + 20,
+              y: recipient.position.y + 20,
+            },
+            image: DesintegrateImage,
+            frames: {
+              max: 4,
+              hold: 10,
+            },
+            animate: true,
+            scaleHeight: 2,
+            scaleWidth: 2,
+          });
+
+          renderedSprites.push(Desintegrate);
+
+          const vibrationTimeline = gsap.timeline({
+            repeat: 3,
+            yoyo: true,
+            onComplete: () => {
+              vibrationTimeline.kill();
+            },
+          });
+
+          vibrationTimeline.to(this.position, {
+            x: '+=15',
+            y: '+=15',
+            duration: 0.1,
+          });
+
+          vibrationTimeline.to(this.position, {
+            x: '-=30',
+            y: '-=30',
+            duration: 0.1,
+          });
+
+          setTimeout(() => {
+            renderedSprites.pop();
+            vibrationTimeline.kill();
+          }, 1000);
+        };
+
+        DesintegrateImage.onerror = () => {
+          console.error('Failed to load image: ', DesintegrateImage.src);
+        };
 
         break;
       }

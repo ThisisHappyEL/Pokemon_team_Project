@@ -24,7 +24,7 @@ const allMonsters = {
     },
     animate: true,
     name: 'Maximba',
-    attacks: [attacks.Tackle, attacks.Thunderbolt],
+    attacks: [attacks.Tackle, attacks.Lightningbolt],
   },
   Somatika: {
     image: {
@@ -36,7 +36,7 @@ const allMonsters = {
     },
     animate: true,
     name: 'Somatika',
-    attacks: [attacks.Tackle, attacks.Fireball],
+    attacks: [attacks.DarkArrow],
   },
   MikhAi_L: {
     image: {
@@ -48,7 +48,7 @@ const allMonsters = {
     },
     animate: true,
     name: 'Mikh AI-L',
-    attacks: [attacks.Tackle, attacks.Fireball],
+    attacks: [attacks.Tackle, attacks.Desintegrate],
   },
   JabbaScript: {
     image: {
@@ -95,7 +95,6 @@ const playerMonsters = [
   'Maximba',
   'Somatika',
   'MikhAi_L',
-  'JabbaScript',
   'Kelpish',
   'Muscletache',
 ];
