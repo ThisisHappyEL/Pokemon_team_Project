@@ -130,71 +130,15 @@ class Monster extends Sprite {
       healthBar = '#playerHealthBar';
     }
 
-    let rotation = 1;
-    if (this.isEnemy) {
-      rotation = -2.2;
-    }
+    let rotation = 0;
 
     recipient.health -= attack.damage;
 
     if (recipient.health < 0) recipient.health = 0;
 
     switch (attack.name) {
-      case 'Fireball': {
-        audio.initFireball.play(); // проигрывание звука при касте
-        const fireballImage = new Image(); // создание спрайта для огненного шара
-        fireballImage.src = './assets/Images/fireball.png';
-        const fireball = new Sprite({
-          position: {
-            x: this.position.x + 40, // точка появления огненного шара
-            y: this.position.y + 40, // снаряд игрока косо летит в цель? - этот параметр фиксить
-          },
-          image: fireballImage,
-          frames: {
-            max: 4,
-            hold: 10,
-          },
-          animate: true,
-          rotation,
-        });
-
-        renderedSprites.splice(1, 0, fireball);
-
-        gsap.to(fireball.position, { // выбор точки полёта проджект тайла (враг)
-          x: recipient.position.x + 40, // снаряд игрока косо летит в цель? - этот параметр фиксить
-          y: recipient.position.y + 40,
-          onComplete: () => {
-            // Враг получает удар
-            audio.fireballHit.play(); // проигрывание звука при попадании
-            gsap.to(healthBar, {
-              width: `${recipient.health}%`, // уменьшение здоровья
-            });
-
-            gsap.to(recipient.position, { // анимация нанесения удара обидчиком
-              x: recipient.position.x + 10,
-              yoyo: true,
-              repeat: 5,
-              duration: 0.08,
-            });
-
-            gsap.to(recipient, { // анимация получения удара жертвой
-              opacity: 0,
-              repeat: 5,
-              yoyo: true,
-              duration: 0.08,
-            });
-            renderedSprites.splice(1, 1);
-          },
-        });
-
-        break;
-      }
       case 'Waterball': {
-        if (this.isEnemy) {
-          rotation = 3;
-        } else {
-          rotation = 0;
-        }
+        rotation = this.isEnemy ? 3 : 0;
 
         audio.initFireball.play(); // проигрывание звука при касте
 
@@ -458,6 +402,8 @@ class Monster extends Sprite {
       }
 
       case 'FireBolt': {
+        rotation = this.isEnemy ? 3 : 0;
+
         const timeline = gsap.timeline({
           onComplete: () => {
             // Враг получает удар
@@ -525,7 +471,7 @@ class Monster extends Sprite {
             const FireBolt = new Sprite({
               position: {
                 x: this.position.x,
-                y: this.position.y,
+                y: this.position.y + (this.isEnemy ? 100 : 100),
               },
               image: FireBoltImage,
               frames: {
@@ -556,6 +502,8 @@ class Monster extends Sprite {
         break;
       }
       case 'IcyArrow': {
+        rotation = this.isEnemy ? 3 : 0;
+
         const timeline = gsap.timeline({
           onComplete: () => {
             // Враг получает удар
@@ -613,8 +561,8 @@ class Monster extends Sprite {
             IcyArrowImage.src = './assets/newImages/kelpish/icy arrow.png';
             const IcyArrow = new Sprite({
               position: {
-                x: this.position.x,
-                y: this.position.y,
+                x: this.position.x + (this.isEnemy ? 100 : 40),
+                y: this.position.y + (this.isEnemy ? 80 : 100),
               },
               image: IcyArrowImage,
               frames: {
@@ -734,11 +682,7 @@ class Monster extends Sprite {
           movementDistance = -80;
         }
 
-        if (this.isEnemy) {
-          rotation = 5;
-        } else {
-          rotation = 0;
-        }
+        rotation = this.isEnemy ? 5 : 0;
 
         timeline.to(this.position, {
           y: this.position.y - 200,
@@ -807,20 +751,66 @@ class Monster extends Sprite {
         break;
       }
       case 'Lightningbolt': {
-        const timeline = gsap.timeline();
-
         let movementDistance = 80;
         if (this.isEnemy) {
           movementDistance = -80;
         }
 
-        if (this.isEnemy) {
-          rotation = 5;
-        } else {
-          rotation = 0;
-        }
+        rotation = this.isEnemy ? 4 : 0;
 
-        // Анимация нервного покачивания
+        // Создаем спрайт Lightningbolt
+        const LightningboltImage = new Image();
+        LightningboltImage.src = './assets/newImages/maximba/lightningbolt.png';
+        const Lightningbolt = new Sprite({
+          position: {
+            x: this.position.x + (this.isEnemy ? 40 : 0),
+            y: this.position.y + 40,
+          },
+          image: LightningboltImage,
+          frames: {
+            max: 4,
+            hold: 10,
+          },
+          animate: true,
+          rotation,
+          scaleHeight: 2.5, // уменьшенный размер по высоте
+          scaleWidth: 2.5, // уменьшенный размер по ширине
+        });
+
+        const timeline = gsap.timeline({
+          onComplete: () => {
+            // Анимация движения Lightningbolt к врагу
+            gsap.to(Lightningbolt.position, {
+              x: recipient.position.x + (this.isEnemy ? 0 : 0),
+              y: recipient.position.y + (this.isEnemy ? -40 : 30),
+              duration: 0.5,
+              onComplete: () => {
+                audio.tackleHit.play(); // проигрывание звука при попадании
+                gsap.to(healthBar, {
+                  width: `${recipient.health}%`, // уменьшение здоровья
+                });
+
+                gsap.to(recipient.position, { // анимация нанесения удара обидчиком
+                  x: recipient.position.x + 10,
+                  yoyo: true,
+                  repeat: 5,
+                  duration: 0.08,
+                });
+
+                gsap.to(recipient, { // анимация получения удара жертвой
+                  opacity: 0,
+                  repeat: 5,
+                  yoyo: true,
+                  duration: 0.08,
+                });
+                // Удаляем спрайт после завершения
+                renderedSprites.splice(1, 1);
+              },
+            });
+          },
+        });
+
+        // Анимация нервного покачивания и движение персонажа перед выстрелом
         timeline.to(this.position, {
           x: this.position.x + 5,
           y: this.position.y - 5,
@@ -828,65 +818,26 @@ class Monster extends Sprite {
           yoyo: true,
           repeat: 5,
           ease: 'power1.inOut',
-        });
-
-        timeline.to(this.position, {
-          y: this.position.y - (this.isEnemy ? -movementDistance * 2 : movementDistance * 2),
-          duration: 0.2,
-          ease: 'power2.out',
-        });
-
-        // Добавляем возврат в исходное положение
-        timeline.to(this.position, {
-          y: this.position.y,
-          duration: 0.2,
-          ease: 'power2.in',
-        });
-
-        // Максимба бежит на стартовую позицию
-        timeline.to(this.position, {
-          x: this.position.x,
-          y: this.position.y,
-          duration: 0.2,
-          onComplete: () => {
-            audio.tackleHit.play(); // проигрывание звука при попадании
-            gsap.to(healthBar, {
-              width: `${recipient.health}%`, // уменьшение здоровья
-            });
-
-            // Создаем спрайт Lightningbolt
-            const LightningboltImage = new Image();
-            LightningboltImage.src = './assets/newImages/maximba/lightningbolt.png';
-            const Lightningbolt = new Sprite({
-              position: {
-                x: this.position.x + (this.isEnemy ? 40 : 0),
-                y: this.position.y + 40,
-              },
-              image: LightningboltImage,
-              frames: {
-                max: 4,
-                hold: 10,
-              },
-              animate: true,
-              rotation,
-              scaleHeight: 2.5, // уменьшенный размер по высоте
-              scaleWidth: 2.5, // уменьшенный размер по ширине
-            });
-
-            // Добавляем спрайт Lightningbolt
-            renderedSprites.push(Lightningbolt);
-
-            // Анимация движения Lightningbolt к врагу
-            gsap.to(Lightningbolt.position, {
-              x: recipient.position.x + (this.isEnemy ? 60 : 0),
-              y: recipient.position.y + (this.isEnemy ? 30 : 30),
-              duration: 0.5,
-              onComplete: () => {
-                renderedSprites.pop(); // Удаляем спрайт после завершения
-              },
-            });
-          },
-        });
+        })
+          .to(this.position, {
+            y: this.position.y - (this.isEnemy ? -movementDistance * 2 : movementDistance * 2),
+            duration: 0.2,
+            ease: 'power2.out',
+          })
+          .to(this.position, {
+            y: this.position.y,
+            duration: 0.2,
+            ease: 'power2.in',
+          })
+          .to(this.position, {
+            x: this.position.x,
+            y: this.position.y,
+            duration: 0.2,
+            onComplete: () => {
+              // Добавляем спрайт Lightningbolt после завершения подготовки персонажа
+              renderedSprites.splice(1, 0, Lightningbolt);
+            },
+          });
 
         break;
       }
@@ -897,11 +848,7 @@ class Monster extends Sprite {
         const radiusX = 120;
         const radiusY = 60;
 
-        if (this.isEnemy) {
-          rotation = 3;
-        } else {
-          rotation = 0;
-        }
+        rotation = this.isEnemy ? 3 : 0;
 
         // Путь в форме знака бесконечности
         const path = [
@@ -918,77 +865,99 @@ class Monster extends Sprite {
 
         gsap.registerPlugin(MotionPathPlugin);
 
-        // Анимация движения по траектории знака бесконечности
-        const animateAttack = gsap.to(this.position, {
-          duration: 4, // Продолжительность анимации
-          repeat: -1,
+        // Создаем анимацию движения по траектории знака бесконечности
+        const timeline = gsap.timeline({
+          onComplete: () => {
+            // Создаем спрайт DarkArrow
+            const DarkArrowImage = new Image();
+            DarkArrowImage.src = './assets/newImages/somatika/dark arrow.png';
+            const DarkArrow = new Sprite({
+              position: {
+                x: startX,
+                y: startY + 40,
+              },
+              image: DarkArrowImage,
+              frames: {
+                max: 4,
+                hold: 10,
+              },
+              animate: true,
+              rotation,
+              scaleHeight: 2,
+              scaleWidth: 2,
+            });
+
+            renderedSprites.splice(1, 0, DarkArrow);
+
+            gsap.to(DarkArrow.position, {
+              x: recipient.position.x,
+              y: recipient.position.y,
+              duration: 0.5,
+              onComplete: () => {
+                audio.tackleHit.play(); // Проигрываем звук при попадании
+                gsap.to(healthBar, {
+                  width: `${recipient.health}%`, // Уменьшение здоровья
+                });
+
+                // Анимация тряски врага
+                gsap.to(recipient.position, {
+                  x: recipient.position.x + 10,
+                  yoyo: true,
+                  repeat: 5,
+                  duration: 0.08,
+                });
+
+                gsap.to(recipient, {
+                  opacity: 0,
+                  repeat: 5,
+                  yoyo: true,
+                  duration: 0.08,
+                });
+                renderedSprites.splice(1, 1);
+                timeline.pause(); // Приостанавливаем анимацию движения по траектории
+
+                // Возвращаем персонажа в исходную позицию
+                gsap.to(this.position, {
+                  x: startX,
+                  y: startY,
+                  duration: 1,
+                  ease: 'power2.inOut',
+                });
+              },
+            });
+          },
+        });
+
+        timeline.to(this.position, {
+          duration: 2, // Устанавливаем продолжительность анимации 2 секунды
           motionPath: {
             path,
             curviness: 1.25,
             autoRotate: true,
           },
           ease: 'power1.inOut',
-          paused: true,
-        });
-
-        // Запускаем анимацию при начале атаки
-        animateAttack.play();
-
-        // Воспроизведение звука при попадании и обновление healthBar
-        gsap.delayedCall(4, () => { // Задержка на время длительности анимации
-          audio.tackleHit.play(); // Проигрывание звука при попадании
-          gsap.to(healthBar, {
-            width: `${recipient.health}%`, // Уменьшение здоровья
-          });
-
-          // Создаем спрайт DarkArrow
-          const DarkArrowImage = new Image();
-          DarkArrowImage.src = './assets/newImages/somatika/dark arrow.png';
-          const DarkArrow = new Sprite({
-            position: {
-              x: this.position.x,
-              y: this.position.y + 40,
-            },
-            image: DarkArrowImage,
-            frames: {
-              max: 4,
-              hold: 10,
-            },
-            animate: true,
-            rotation,
-            scaleHeight: 2,
-            scaleWidth: 2,
-          });
-
-          renderedSprites.push(DarkArrow);
-
-          gsap.to(DarkArrow.position, {
-            x: recipient.position.x,
-            y: recipient.position.y,
-            duration: 0.5,
-            onComplete: () => {
-              renderedSprites.pop();
-
-              animateAttack.pause();
-
-              // Возвращаем персонажа в исходную позицию
-              gsap.to(this.position, {
-                x: startX,
-                y: startY,
-                duration: 1,
-                ease: 'power2.inOut',
-              });
-            },
-          });
         });
 
         break;
       }
-
       case 'Desintegrate': {
         audio.tackleHit.play(); // проигрывание звука при попадании
         gsap.to(healthBar, {
           width: `${recipient.health}%`, // уменьшение здоровья
+        });
+
+        gsap.to(recipient.position, { // анимация нанесения удара обидчиком
+          x: recipient.position.x + 10,
+          yoyo: true,
+          repeat: 5,
+          duration: 0.18,
+        });
+
+        gsap.to(recipient, { // анимация получения удара жертвой
+          opacity: 0,
+          repeat: 5,
+          yoyo: true,
+          duration: 0.18,
         });
 
         // Создаем спрайт Desintegrate
@@ -1045,47 +1014,6 @@ class Monster extends Sprite {
 
         break;
       }
-      case 'Tackle': {
-        const timeline = gsap.timeline();
-
-        let movementDistance = 20;
-        if (this.isEnemy) {
-          movementDistance = -20;
-        }
-
-        timeline.to(this.position, {
-          x: this.position.x - movementDistance,
-        })
-          .to(this.position, {
-            x: this.position.x + movementDistance * 2,
-            duration: 0.1,
-            onComplete: () => {
-              // Враг получает удар
-              audio.tackleHit.play();
-              gsap.to(healthBar, {
-                width: `${recipient.health}%`,
-              });
-
-              gsap.to(recipient.position, {
-                x: recipient.position.x + 10,
-                yoyo: true,
-                repeat: 5,
-                duration: 0.08,
-              });
-
-              gsap.to(recipient, {
-                opacity: 0,
-                repeat: 5,
-                yoyo: true,
-                duration: 0.08,
-              });
-            },
-          })
-          .to(this.position, {
-            x: this.position.x,
-          });
-        break;
-      }
       default:
         console.log('Что-то не так');
     }
@@ -1107,7 +1035,7 @@ class Boundary {
   }
 
   draw() {
-    this.context.fillStyle = 'rgba(255, 0, 0, 0'; // цвет границ. Полезно для отладки
+    this.context.fillStyle = 'rgba(255, 0, 0, 0.3'; // цвет границ. Полезно для отладки
     this.context.fillRect(this.position.x, this.position.y, this.width, this.height);
   }
 }

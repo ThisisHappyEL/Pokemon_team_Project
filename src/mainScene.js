@@ -204,7 +204,7 @@ function animate() { // функция, которая постоянно отр
           rectangle2: battleZone,
         })
         && overlappingArea > (player.width * player.height) / 2
-        && Math.random() < 0.01 // шанс начала сражения
+        && Math.random() < 1 // шанс начала сражения
       ) {
         window.cancelAnimationFrame(animbationId);
 
@@ -356,7 +356,7 @@ function animate() { // функция, которая постоянно отр
 }
 
 // добавить комментарий, при необходимости быстрой отладки боёв (ну и снять его в battleScene.js)
-animate();
+// animate();
 
 // Массивы с допустимыми для нажатиями кнопками движения
 const upButtons = ['w', 'ц', 'ArrowUp'];

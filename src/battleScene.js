@@ -50,7 +50,9 @@ function initBattle() {
   const monsterKeys = Object.keys(allMonsters);
 
   // Выбираем случайный ключ из массива
-  const randomMonsterKey = monsterKeys[Math.floor(Math.random() * monsterKeys.length)];
+  const randomMonsterKey = 'Muscletache';
+  // убрано отладки ради
+  // const randomMonsterKey = monsterKeys[Math.floor(Math.random() * monsterKeys.length)];
 
   // Инициализация случайного врага-монстра
   enemyMonster = new Monster({
@@ -255,8 +257,8 @@ function animateBattle() {
 }
 
 // Отменить комментарий, при необходимости быстрой отладки боёв
-// initBattle();
-// animateBattle();
+initBattle();
+animateBattle();
 
 // логика для срабатывания клика по сообщению после атаки
 document.querySelector('#dialogueBox').addEventListener('click', (event) => {
