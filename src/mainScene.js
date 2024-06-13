@@ -15,28 +15,28 @@ canvas.width = 1732;
 canvas.height = 852;
 
 // Создание подмассивов строк для карты коллизий
-// 70, потому что это количество плиток в одной строке карты мира в текущей реализации
+// 100, потому что это количество плиток в одной строке карты мира в текущей реализации
 const collisionsMap = [];
-for (let i = 0; i < collisions.length; i += 70) {
-  collisionsMap.push(collisions.slice(i, i + 70));
+for (let i = 0; i < collisions.length; i += 100) {
+  collisionsMap.push(collisions.slice(i, i + 100));
 }
 
 // тоже самое, но для коллизий боевых зон
 const battleZonesMap = [];
-for (let i = 0; i < battleZonesData.length; i += 70) {
-  battleZonesMap.push(battleZonesData.slice(i, i + 70));
+for (let i = 0; i < battleZonesData.length; i += 100) {
+  battleZonesMap.push(battleZonesData.slice(i, i + 100));
 }
 
 const boundaries = [];
 const offset = { // стартовая позиция игрока по отношению к координатам
-  x: -350,
-  y: -475,
+  x: -125,
+  y: -85,
 };
 
 // i - индекс строки. j - индекс символа(ячейки)
 collisionsMap.forEach((row, i) => {
   row.forEach((symbol, j) => {
-    if (symbol === 1025) {
+    if (symbol === 2513) {
       boundaries.push(new Boundary(
         {
           position: {
@@ -55,7 +55,7 @@ const battleZones = [];
 
 battleZonesMap.forEach((row, i) => {
   row.forEach((symbol, j) => {
-    if (symbol === 1025) {
+    if (symbol === 2577 || symbol === 2750 || symbol === 2720 || symbol === 2656 || symbol === 2641 || symbol === 2528 || symbol === 2592 || symbol === 2705) {
       battleZones.push(new Boundary(
         {
           position: {
@@ -71,22 +71,22 @@ battleZonesMap.forEach((row, i) => {
 
 // загрузка изображений карты мира, переднего плана и всех сторон спрайта игрока
 const backgroundImage = new Image();
-backgroundImage.src = './assets/Images/Pellet Town.png';
+backgroundImage.src = './assets/newImages/map/NEWMAP.png';
 
-const foregroundImage = new Image();
-foregroundImage.src = './assets/Images/foreground.png';
+// const foregroundImage = new Image();
+// foregroundImage.src = './assets/Images/foreground.png';
 
 const playerUpImage = new Image();
-playerUpImage.src = './assets/Images/playerUp.png';
+playerUpImage.src = './assets/newImages/player/playerUp.png';
 
 const playerLeftImage = new Image();
-playerLeftImage.src = './assets/Images/playerLeft.png';
+playerLeftImage.src = './assets/newImages/player/playerLeft.png';
 
 const playerDownImage = new Image();
-playerDownImage.src = './assets/Images/playerDown.png';
+playerDownImage.src = './assets/newImages/player/playerDown.png';
 
 const playerRightImage = new Image();
-playerRightImage.src = './assets/Images/playerRight.png';
+playerRightImage.src = './assets/newImages/player/playerRight.png';
 
 const player = new Sprite({
   position: { // стартовая точка игрока на карте. Сейчас это середина экрана
@@ -104,6 +104,8 @@ const player = new Sprite({
     down: playerDownImage,
     right: playerRightImage,
   },
+  scaleHeight: 1.5,
+  scaleWidth: 1.5,
 });
 
 const background = new Sprite({ // создание карты мира
@@ -114,13 +116,13 @@ const background = new Sprite({ // создание карты мира
   image: backgroundImage,
 });
 
-const foreground = new Sprite({ // создание переднего плана
-  position: {
-    x: offset.x,
-    y: offset.y,
-  },
-  image: foregroundImage,
-});
+// const foreground = new Sprite({ // создание переднего плана
+//   position: {
+//     x: offset.x,
+//     y: offset.y,
+//   },
+//   image: foregroundImage,
+// });
 
 // вот тут должен быть скрипт кнопки обучения !!!
 
@@ -149,7 +151,7 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
   );
 }
 // Массив с объектами, симулирующими движ.
-const movables = [background, ...boundaries, foreground, ...battleZones];
+const movables = [background, ...boundaries, ...battleZones];
 
 const battle = { // состояние инициализации битвы
   initiated: false,
@@ -168,7 +170,7 @@ function animate() { // функция, которая постоянно отр
     battleZone.draw();
   });
   player.draw(context); // отрисовка спрайта персонажа
-  foreground.draw(context); // отриовка боевого задника
+  // foreground.draw(context); // отриовка боевого задника
 
   // сегментик для остановки анимации ходьбы при срабатывании сражения
   let moving = true;

@@ -1,30 +1,12 @@
 // Массив с атаками
 const attacks = {
-  Tackle: { // родительский элемент
-    name: 'Tackle', // название
-    damage: 10, // наносимый урон
-    type: 'Normal', // текст для блока "Тип урона"
-    color: 'black', // цвет текста в блоке "Тип урона"
-    typeIcon: {
-      src: './assets/newImages/icons/testIcon1.png',
-    },
-  },
-  Fireball: {
-    name: 'Fireball',
-    damage: 25,
-    type: 'Fire',
-    color: 'red',
-    typeIcon: {
-      src: './assets/newImages/icons/testIcon2.png',
-    },
-  },
   Lightningbolt: {
     name: 'Lightningbolt',
     damage: 30,
     type: 'Electric',
     color: 'yellow',
     typeIcon: {
-      src: './assets/newImages/icons/testIcon2.png',
+      src: './assets/newImages/icons/lightningbolt.png',
     },
   },
   Coconut: {
@@ -33,7 +15,7 @@ const attacks = {
     type: 'Normal',
     color: 'black',
     typeIcon: {
-      src: './assets/newImages/icons/testIcon1.png',
+      src: './assets/newImages/icons/coconut.png',
     },
   },
   Waterball: {
@@ -42,25 +24,25 @@ const attacks = {
     type: 'Water',
     color: 'blue',
     typeIcon: {
-      src: './assets/newImages/icons/testIcon2.png',
+      src: './assets/newImages/icons/waterball.png',
     },
   },
   java_Slash: {
     name: 'java_Slash',
-    damage: 5,
+    damage: 25,
     type: 'Normal',
     color: 'black',
     typeIcon: {
-      src: './assets/newImages/icons/testIcon1.png',
+      src: './assets/newImages/icons/java slash.png',
     },
   },
   poisonous_Spit: {
     name: 'poisonous_Spit',
-    damage: 5,
+    damage: 30,
     type: 'Poison',
     color: 'green',
     typeIcon: {
-      src: './assets/newImages/icons/testIcon2.png',
+      src: './assets/newImages/icons/acid spit.png',
     },
   },
   DarkArrow: {
@@ -69,7 +51,7 @@ const attacks = {
     type: 'Hypnosis',
     color: 'purple',
     typeIcon: {
-      src: './assets/newImages/icons/testIcon2.png',
+      src: './assets/newImages/icons/dark arrow.png',
     },
   },
   Desintegrate: {
@@ -78,7 +60,43 @@ const attacks = {
     type: 'Separation',
     color: 'orange',
     typeIcon: {
-      src: './assets/newImages/icons/testIcon2.png',
+      src: './assets/newImages/icons/desintegrate.png',
+    },
+  },
+  FireBolt: {
+    name: 'FireBolt',
+    damage: 25,
+    type: 'Magic',
+    color: 'Red',
+    typeIcon: {
+      src: './assets/newImages/icons/fire bolt.png',
+    },
+  },
+  IcyArrow: {
+    name: 'IcyArrow',
+    damage: 15,
+    type: 'Magic',
+    color: 'Blue',
+    typeIcon: {
+      src: './assets/newImages/icons/icy arrow.png',
+    },
+  },
+  EarthBump: {
+    name: 'EarthBump',
+    damage: 10,
+    type: 'Nature',
+    color: 'Brown',
+    typeIcon: {
+      src: './assets/newImages/icons/earth bump.png',
+    },
+  },
+  Punch: {
+    name: 'Punch',
+    damage: 20,
+    type: 'Normal',
+    color: 'Green',
+    typeIcon: {
+      src: './assets/newImages/icons/punch.png',
     },
   },
 };

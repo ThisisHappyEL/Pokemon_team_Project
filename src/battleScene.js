@@ -11,7 +11,7 @@ const canvas = document.querySelector('canvas'); // вырисовываемый
 const context = canvas.getContext('2d'); // контекст
 
 const battleBackGroundImage = new Image(); // загрузка задника для арены
-battleBackGroundImage.src = './assets/Images/battleBackground.png';
+battleBackGroundImage.src = './assets/newImages/background/background.png';
 const battleBackground = new Sprite({
   position: {
     x: 0,
@@ -38,7 +38,6 @@ let battleAnimationId;
 let queue;
 
 function initBattle() {
-  console.log('Initializing battle...');
   document.querySelector('#chooseMonstersPanel').style.display = 'block';
   document.querySelector('#userInterface').style.display = 'block';
   document.querySelector('#dialogueBox').style.display = 'none';
@@ -47,8 +46,15 @@ function initBattle() {
   document.querySelector('#chooseMonstersBox').replaceChildren();
   document.querySelector('#attacksBox').replaceChildren();
 
+  // Получаем массив ключей всех монстров
+  const monsterKeys = Object.keys(allMonsters);
+
+  // Выбираем случайный ключ из массива
+  const randomMonsterKey = monsterKeys[Math.floor(Math.random() * monsterKeys.length)];
+
+  // Инициализация случайного врага-монстра
   enemyMonster = new Monster({
-    ...allMonsters.Somalma,
+    ...allMonsters[randomMonsterKey],
     position: enemyMonsterPosition,
     isEnemy: true,
   });
@@ -59,7 +65,6 @@ function initBattle() {
 
   playerMonsters.forEach((monsterKey) => {
     const monsterData = allMonsters[monsterKey];
-    console.log(`Creating button for monster: ${monsterData.name}`);
     const pickMonsterButton = document.createElement('button');
     pickMonsterButton.id = 'chooseMonsterButton';
     pickMonsterButton.classList.add('monster-container');
@@ -130,9 +135,6 @@ function initBattle() {
   document.querySelectorAll('#chooseMonstersBox button').forEach((selectMonsterButton) => {
     selectMonsterButton.addEventListener('click', (selectMonsterEvent) => {
       const selectedMonsterKey = selectMonsterEvent.currentTarget.getAttribute('data-key');
-      console.log(`Selected monster key: ${selectedMonsterKey}`);
-      console.log('allMonsters:', allMonsters);
-      console.log('Selected monster data:', allMonsters[selectedMonsterKey]);
       if (!allMonsters[selectedMonsterKey]) {
         console.error(`Monster key ${selectedMonsterKey} does not exist in allMonsters`);
         return;
@@ -187,10 +189,7 @@ function initBattle() {
                   );
 
                   if (!playerMonsters.includes(enemyMonsterKey)) {
-                    console.log(`Adding new monster to playerMonsters: ${enemyMonsterKey}`);
                     playerMonsters.push(enemyMonsterKey);
-                  } else {
-                    console.log(`Monster already in playerMonsters: ${enemyMonsterKey}`);
                   }
 
                   audio.map.play();

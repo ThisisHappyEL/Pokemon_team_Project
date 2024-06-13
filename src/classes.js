@@ -456,6 +456,356 @@ class Monster extends Sprite {
 
         break;
       }
+
+      case 'FireBolt': {
+        const timeline = gsap.timeline({
+          onComplete: () => {
+            // Враг получает удар
+            audio.tackleHit.play(); // проигрывание звука при попадании
+            gsap.to(healthBar, {
+              width: `${recipient.health}%`, // уменьшение здоровья
+            });
+
+            gsap.to(recipient.position, { // анимация нанесения удара обидчиком
+              x: recipient.position.x + 10,
+              yoyo: true,
+              repeat: 5,
+              duration: 0.08,
+            });
+
+            gsap.to(recipient, { // анимация получения удара жертвой
+              opacity: 0,
+              repeat: 5,
+              yoyo: true,
+              duration: 0.08,
+            });
+
+            // Анимация возвращения на исходную позицию
+            gsap.to(this.position, {
+              x: initialPosition.x,
+              y: initialPosition.y,
+              duration: 0.5,
+            });
+          },
+        });
+
+        let distance = 80;
+        if (this.isEnemy) {
+          distance = -80;
+        }
+
+        // Анимация полёта (постарался чёт сделать))
+        timeline.to(this.position, {
+          motionPath: {
+            path: [
+              { x: this.position.x, y: this.position.y },
+              // Дополнительная точка для дуги влево
+              { x: this.position.x - distance / 2, y: this.position.y - distance / 4 },
+              { x: this.position.x - distance, y: this.position.y },
+              // Дополнительная точка для дуги вправо
+              { x: this.position.x - distance / 2, y: this.position.y + distance / 4 },
+              { x: this.position.x, y: this.position.y },
+            ],
+            curviness: 1,
+            autoRotate: true,
+          },
+          duration: 1, // Длительность анимации
+          ease: 'power1.inOut',
+        });
+
+        // бежит на стартовую позицию и наносит удар
+        timeline.to(this.position, {
+          x: this.position.x,
+          y: this.position.y,
+          duration: 0.2,
+          onStart: () => {
+            // Создаем спрайт удара
+            const FireBoltImage = new Image();
+            FireBoltImage.src = './assets/newImages/kelpish/fire bolt.png';
+            const FireBolt = new Sprite({
+              position: {
+                x: this.position.x,
+                y: this.position.y,
+              },
+              image: FireBoltImage,
+              frames: {
+                max: 4,
+                hold: 10,
+              },
+              animate: true,
+              rotation: 0,
+              scaleHeight: 2,
+              scaleWidth: 2,
+            });
+
+            // Добавляем спрайт удара
+            renderedSprites.splice(1, 0, FireBolt);
+
+            // Анимация удара
+            gsap.to(FireBolt.position, {
+              x: recipient.position.x,
+              y: recipient.position.y + 100,
+              duration: 0.3,
+              onComplete: () => {
+                renderedSprites.splice(1, 1);
+              },
+            });
+          },
+        });
+
+        break;
+      }
+      case 'IcyArrow': {
+        const timeline = gsap.timeline({
+          onComplete: () => {
+            // Враг получает удар
+            audio.tackleHit.play(); // проигрывание звука при попадании
+            gsap.to(healthBar, {
+              width: `${recipient.health}%`, // уменьшение здоровья
+            });
+
+            gsap.to(recipient.position, { // анимация нанесения удара обидчиком
+              x: recipient.position.x + 10,
+              yoyo: true,
+              repeat: 5,
+              duration: 0.08,
+            });
+
+            gsap.to(recipient, { // анимация получения удара жертвой
+              opacity: 0,
+              repeat: 5,
+              yoyo: true,
+              duration: 0.08,
+            });
+          },
+        });
+
+        let distance = 80;
+        if (this.isEnemy) {
+          distance = -80;
+        }
+
+        // Анимация полёта
+        timeline.to(this.position, {
+          motionPath: {
+            path: [
+              { x: this.position.x, y: this.position.y },
+              { x: this.position.x + distance / 2, y: this.position.y - distance / 4 },
+              { x: this.position.x + distance, y: this.position.y },
+              { x: this.position.x + distance / 2, y: this.position.y + distance / 4 },
+              { x: this.position.x, y: this.position.y },
+            ],
+            curviness: 1,
+            autoRotate: true,
+          },
+          duration: 1, // Длительность анимации
+          ease: 'power1.inOut',
+        });
+
+        // бежит на стартовую позицию и наносит удар
+        timeline.to(this.position, {
+          x: this.position.x,
+          y: this.position.y,
+          duration: 0.2,
+          onStart: () => {
+            // Создаем спрайт удара
+            const IcyArrowImage = new Image();
+            IcyArrowImage.src = './assets/newImages/kelpish/icy arrow.png';
+            const IcyArrow = new Sprite({
+              position: {
+                x: this.position.x,
+                y: this.position.y,
+              },
+              image: IcyArrowImage,
+              frames: {
+                max: 4,
+                hold: 10,
+              },
+              animate: true,
+              rotation: 0,
+              scaleHeight: 1,
+              scaleWidth: 1,
+            });
+
+            // Добавляем спрайт удара
+            renderedSprites.splice(1, 0, IcyArrow);
+
+            // Анимация удара
+            gsap.to(IcyArrow.position, {
+              x: recipient.position.x,
+              y: recipient.position.y + 100, // Смещение вниз на 100 пикселей
+              duration: 0.5,
+              onComplete: () => {
+                renderedSprites.splice(1, 1); // Удаляем спрайт удара после завершения
+              },
+            });
+          },
+        });
+
+        break;
+      }
+      case 'EarthBump': {
+        const EarthBumpImage = new Image();
+        EarthBumpImage.src = './assets/newImages/muscletache/earth bump.png';
+        const EarthBump = new Sprite({
+          position: {
+            x: recipient.position.x,
+            y: recipient.position.y,
+          },
+          image: EarthBumpImage,
+          frames: {
+            max: 4,
+            hold: 10,
+          },
+          animate: true,
+          // rotation: 90, // Убираем поворот
+          scaleHeight: 3, // Уменьшаем размер
+          scaleWidth: 3, // Уменьшаем размер
+        });
+        renderedSprites.push(EarthBump);
+
+        // Сохраняем начальную позицию
+        const initialPosition = { x: this.position.x, y: this.position.y };
+
+        const timeline = gsap.timeline({
+          onComplete: () => {
+            // Враг получает удар
+            audio.tackleHit.play(); // проигрывание звука при попадании
+            gsap.to(healthBar, {
+              width: `${recipient.health}%`, // уменьшение здоровья
+            });
+
+            gsap.to(recipient.position, { // анимация нанесения удара обидчиком
+              x: recipient.position.x + 10,
+              yoyo: true,
+              repeat: 5,
+              duration: 0.08,
+            });
+
+            gsap.to(recipient, { // анимация получения удара жертвой
+              opacity: 0,
+              repeat: 5,
+              yoyo: true,
+              duration: 0.08,
+            });
+
+            // Удаляем спрайт удара после завершения анимации
+            renderedSprites.splice(renderedSprites.indexOf(EarthBump), 1);
+          },
+        });
+
+        let movementDistance = 80;
+        if (this.isEnemy) {
+          movementDistance = -80;
+        }
+
+        timeline.to(this.position, {
+          x: this.position.x - movementDistance * 6,
+          y: this.position.y + movementDistance * 2,
+          duration: 0.5,
+        });
+
+        timeline.to(this.position, {
+          x: this.position.x,
+          y: this.position.y,
+          duration: 0.2,
+          onStart: () => {
+            gsap.to(EarthBump.position, {
+              y: recipient.position.y + 50,
+
+              duration: 0.3,
+            });
+          },
+          onComplete: () => {
+            gsap.to(this.position, {
+              x: initialPosition.x,
+              duration: 0.5,
+            });
+          },
+        });
+
+        break;
+      }
+      case 'Punch': {
+        const timeline = gsap.timeline();
+
+        let movementDistance = 80;
+        if (this.isEnemy) {
+          movementDistance = -80;
+        }
+
+        if (this.isEnemy) {
+          rotation = 5;
+        } else {
+          rotation = 0;
+        }
+
+        timeline.to(this.position, {
+          y: this.position.y - 200,
+          duration: 0.2,
+          ease: 'power2.inOut',
+          onStart: () => {
+          },
+          onComplete: () => {
+          // Создаем спрайт Punch
+            const PunchImage = new Image();
+            PunchImage.src = './assets/newImages/muscletache/punch.png';
+            const Punch = new Sprite({
+              position: {
+                x: recipient.position.x + (this.isEnemy ? 40 : 0),
+                y: recipient.position.y + 100,
+              },
+              image: PunchImage,
+              frames: {
+                max: 4,
+                hold: 10,
+              },
+              animate: true,
+              rotation,
+              scaleHeight: 4,
+              scaleWidth: 4,
+              autoAlpha: true,
+            });
+
+            // Добавляем спрайт Punch
+            renderedSprites.push(Punch);
+
+            gsap.to(Punch.position, {
+              x: recipient.position.x + (this.isEnemy ? 60 : 0),
+              y: recipient.position.y + (this.isEnemy ? 30 : 30),
+              duration: 0.5,
+              onComplete: () => {
+                renderedSprites.pop(); // Удаляем спрайт после завершения
+              },
+            });
+
+            // Анимация уменьшения шкалы здоровья врага
+            gsap.to(healthBar, {
+              width: `${recipient.health}%`,
+              duration: 0.5,
+              onComplete: () => {
+                // Враг получает удар
+                audio.tackleHit.play(); // проигрывание звука при попадании
+              },
+            });
+          },
+        });
+
+        timeline.to(this.position, {
+          y: this.position.y + 0,
+          duration: 0.3,
+          delay: 0.5, // Задержка перед возвратом
+          onComplete: () => {
+            gsap.to(this.position, {
+              x: this.position.x,
+              y: this.position.y,
+              duration: 0.2,
+            });
+          },
+        });
+
+        break;
+      }
       case 'Lightningbolt': {
         const timeline = gsap.timeline();
 
@@ -757,7 +1107,7 @@ class Boundary {
   }
 
   draw() {
-    this.context.fillStyle = 'rgba(255, 0, 0, 0.5'; // цвет границ. Полезно для отладки
+    this.context.fillStyle = 'rgba(255, 0, 0, 0'; // цвет границ. Полезно для отладки
     this.context.fillRect(this.position.x, this.position.y, this.width, this.height);
   }
 }

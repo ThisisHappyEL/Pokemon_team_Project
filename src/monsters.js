@@ -24,7 +24,7 @@ const allMonsters = {
     },
     animate: true,
     name: 'Maximba',
-    attacks: [attacks.Tackle, attacks.Lightningbolt],
+    attacks: [attacks.Lightningbolt],
   },
   Somatika: {
     image: {
@@ -36,7 +36,7 @@ const allMonsters = {
     },
     animate: true,
     name: 'Somatika',
-    attacks: [attacks.Tackle, attacks.DarkArrow],
+    attacks: [attacks.DarkArrow],
   },
   MikhAi_L: {
     image: {
@@ -48,7 +48,7 @@ const allMonsters = {
     },
     animate: true,
     name: 'Mikh AI-L',
-    attacks: [attacks.Tackle, attacks.Desintegrate],
+    attacks: [attacks.Desintegrate],
   },
   JabbaScript: {
     image: {
@@ -73,7 +73,7 @@ const allMonsters = {
     },
     animate: true,
     name: 'Kelpish',
-    attacks: [attacks.Tackle],
+    attacks: [attacks.IcyArrow, attacks.FireBolt],
     flip: false,
   },
   Muscletache: {
@@ -86,17 +86,12 @@ const allMonsters = {
     },
     animate: true,
     name: 'Muscletache',
-    attacks: [attacks.Tackle],
+    attacks: [attacks.EarthBump, attacks.Punch],
   },
 };
 
 const playerMonsters = [
-  'Somalma',
-  'Maximba',
-  'Somatika',
-  'MikhAi_L',
-  'Kelpish',
-  'Muscletache',
+  'JabbaScript',
 ];
 
 export { allMonsters, playerMonsters };
