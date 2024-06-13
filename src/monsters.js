@@ -24,7 +24,7 @@ const allMonsters = {
     },
     animate: true,
     name: 'Maximba',
-    attacks: [attacks.Lightningbolt],
+    attacks: [attacks.Lightningbolt, attacks.TheDust],
   },
   Somatika: {
     image: {
@@ -36,7 +36,7 @@ const allMonsters = {
     },
     animate: true,
     name: 'Somatika',
-    attacks: [attacks.DarkArrow],
+    attacks: [attacks.DarkArrow, attacks.Slash],
   },
   MikhAi_L: {
     image: {
@@ -48,7 +48,7 @@ const allMonsters = {
     },
     animate: true,
     name: 'Mikh AI-L',
-    attacks: [attacks.Desintegrate],
+    attacks: [attacks.Desintegrate, attacks.ElectricStrike],
   },
   JabbaScript: {
     image: {
