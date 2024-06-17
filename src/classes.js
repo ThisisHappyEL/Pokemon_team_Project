@@ -1154,7 +1154,11 @@ class Monster extends Sprite {
             gsap.to(healthBar, {
               width: `${recipient.health}%`, // уменьшение здоровья
             });
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> 89480704ddb77437ea51143b99ebb961c560bcba
             gsap.to(recipient.position, { // анимация нанесения удара обидчиком
               x: recipient.position.x + 10,
               yoyo: true,
@@ -1168,7 +1172,11 @@ class Monster extends Sprite {
               yoyo: true,
               duration: 0.08,
             });
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> 89480704ddb77437ea51143b99ebb961c560bcba
             // Удаляем спрайт удара после завершения анимации
             renderedSprites.splice(renderedSprites.indexOf(TheDust), 1);
           },

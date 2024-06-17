@@ -123,7 +123,11 @@ const attacks = {
     type: 'Normal',
     color: 'Black',
     typeIcon: {
+<<<<<<< HEAD
       src: './assets/newImages/icons/slash.png',
+=======
+      src: './assets/newImages/icons/slash.png'
+>>>>>>> 89480704ddb77437ea51143b99ebb961c560bcba
     },
   },
 };
