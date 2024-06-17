@@ -5,7 +5,7 @@
   src: url('./assets/Fonts/PressStart2P-Regular.ttf') format('truetype');
 }
 
-*:not(#monsterAnimBox):not(.icon-container):not(.healthBackground):not(.buttonText):not(.instruction-window){
+*:not(#monsterAnimBox):not(.icon-container):not(.healthBackground):not(.buttonText):not(.instruction-window):not(#volumeControl):not(.volume-control):not(#volumeButton):not(#volumeOptions):not(.volume-options):not(.volume-option){
   font-family: 'Press Start 2P';
   width: 100%;
   height: 100%;
@@ -124,4 +124,42 @@ button:hover {
 
 .close-button:hover {
   background-color: #3e8e41;
+}
+
+.volume-control {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  cursor: pointer;
+}
+
+#volumeButton {
+  width: 40px;  /* Установите подходящий размер кнопки */
+  height: 40px;
+}
+
+.volume-options {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 50px;  /* Отступ от кнопки */
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+  z-index: 20;
+}
+
+.volume-option {
+  padding: 5px 10px;
+  text-align: center;
+  background-color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.volume-option:hover {
+  background-color: #f0f0f0;
 }

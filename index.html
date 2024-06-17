@@ -26,6 +26,20 @@
 
       <canvas></canvas>
 
+      <!-- Инструкции по управлению -->
+      <div class="instruction-window">
+        <h2>Инструкции по управлению</h2>
+        <p>Для перемещения используйте:</p>
+        <ul>
+          <li>Клавиши WASD</li>
+          <li>Клавиши ЦФЫВ</li>
+          <li>Стрелки на клавиатуре</li>
+        </ul>
+        <p>Для выбора покемона и атаки используйте мышь.</p>
+        <!-- Кнопка для закрытия окошка -->
+        <button class="close-button">Закрыть</button>
+      </div>
+
       <!-- Менюшка выбора монстра -->
       <div
         id="chooseMonstersPanel"
@@ -171,6 +185,17 @@
           </div>
         </div>
       </div>
+
+      <!-- Кнопка регулировки громкости -->
+      <div id="volumeControl" class="volume-control">
+        <img id="volumeButton" src="./assets/newImages/icons/volume.png" alt="Volume Control" />
+        <div id="volumeOptions" class="volume-options">
+          <button class="volume-option" data-volume="0">0%</button>
+          <button class="volume-option" data-volume="0.33">33%</button>
+          <button class="volume-option" data-volume="0.66">66%</button>
+          <button class="volume-option" data-volume="1">100%</button>
+        </div>
+      </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/MotionPathPlugin.min.js"></script>
@@ -187,5 +212,6 @@
     <script type="module" src="src/monsters.js"></script>
     <script type="module" src="index.js"></script>
     <script type="module" src="src/battleScene.js"></script>
+    <script src="src/volumeControl.js"></script>
   </body>
 </html>

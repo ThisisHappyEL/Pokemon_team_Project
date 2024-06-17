@@ -1226,7 +1226,7 @@ class Boundary {
   }
 
   draw() {
-    this.context.fillStyle = 'rgba(255, 0, 0, 0.3'; // цвет границ. Полезно для отладки
+    this.context.fillStyle = 'rgba(255, 0, 0, 0'; // цвет границ. Полезно для отладки
     this.context.fillRect(this.position.x, this.position.y, this.width, this.height);
   }
 }

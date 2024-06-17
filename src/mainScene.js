@@ -124,7 +124,12 @@ const background = new Sprite({ // создание карты мира
 //   image: foregroundImage,
 // });
 
-// вот тут должен быть скрипт кнопки обучения !!!
+const closeButton = document.querySelector('.close-button');
+const instructionWindow = document.querySelector('.instruction-window');
+
+closeButton.addEventListener('click', () => {
+  instructionWindow.style.display = 'none';
+});
 
 const keys = { // объект нажатия кнопок. Меняется на true при нажатии
   w: {
@@ -210,6 +215,7 @@ function animate() { // функция, которая постоянно отр
 
         audio.map.stop();
         audio.initBattle.play();
+        audio.battle.loop(true);
         audio.battle.play();
 
         battle.initiated = true;
@@ -398,6 +404,7 @@ window.addEventListener('keyup', ({ key }) => {
 let clicked = false;
 window.addEventListener('click', () => {
   if (!clicked) {
+    audio.map.loop(true);
     audio.map.play();
     clicked = true;
   }
