@@ -99,6 +99,33 @@ const attacks = {
       src: './assets/newImages/icons/punch.png',
     },
   },
+  ElectricStrike: {
+    name: 'ElectricStrike',
+    damage: 15,
+    type: 'Electric',
+    color: 'yellow',
+    typeIcon: {
+      src: './assets/newImages/icons/electric strike.png',
+    },
+  },
+  TheDust: {
+    name: 'TheDust',
+    damage: 20,
+    type: 'Nature',
+    color: 'Brown',
+    typeIcon: {
+      src: './assets/newImages/icons/thedust.png',
+    },
+  },
+  Slash: {
+    name: 'Slash',
+    damage: 20,
+    type: 'Normal',
+    color: 'Black',
+    typeIcon: {
+      src: './assets/newImages/icons/slash.png',
+    },
+  },
 };
 
 export default attacks;

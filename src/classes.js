@@ -122,9 +122,6 @@ class Monster extends Sprite {
   }
 
   attack({ attack, recipient, renderedSprites }) {
-    document.querySelector('#dialogueBox').style.display = 'block';
-    document.querySelector('#dialogueBox').innerHTML = `${this.name} used ${attack.name}`;
-
     let healthBar = '#enemyHealthBar';
     if (this.isEnemy) {
       healthBar = '#playerHealthBar';
@@ -677,11 +674,6 @@ class Monster extends Sprite {
       case 'Punch': {
         const timeline = gsap.timeline();
 
-        let movementDistance = 80;
-        if (this.isEnemy) {
-          movementDistance = -80;
-        }
-
         rotation = this.isEnemy ? 5 : 0;
 
         timeline.to(this.position, {
@@ -1014,6 +1006,206 @@ class Monster extends Sprite {
 
         break;
       }
+      case 'Slash': {
+        audio.tackleHit.play(); // проигрывание звука при атаке
+        gsap.to(healthBar, {
+          width: `${recipient.health}%`, // Уменьшение здоровья
+        });
+
+        // Анимация подпрыгивания
+        gsap.to(this.position, {
+          y: this.position.y - 200, // подпрыгивание
+          duration: 0.1,
+          yoyo: true,
+          repeat: 1,
+          onComplete: () => {
+            // создаём спрайт Slash
+            const slashImage = new Image();
+            slashImage.src = './assets/newImages/somatika/slash.png';
+            const slash = new Sprite({
+              position: {
+                x: recipient.position.x - 70, // Увеличение смещения влево
+                y: recipient.position.y + 20, // Позиция Y врага с учётом смещения вниз
+              },
+              image: slashImage,
+              frames: {
+                max: 4,
+                hold: 10,
+              },
+              animate: true,
+              scaleHeight: 5,
+              scaleWidth: 5,
+            });
+
+            // Добавляем спрайт slash
+            renderedSprites.push(slash);
+
+            // Удаляем спрайт slash после завершения анимации удара
+            setTimeout(() => {
+              renderedSprites.pop();
+            }, 300); // продолжительность анимации удара
+          },
+        });
+        break;
+      }
+      case 'ElectricStrike': {
+        rotation = this.isEnemy ? 3 : 0;
+
+        audio.initFireball.play(); // проигрывание звука при касте
+
+        const timeline = gsap.timeline({
+          onComplete: () => {
+            const electricStrikeImage = new Image(); // создание спрайта для электро страйка
+            electricStrikeImage.src = './assets/newImages/mikh ai-l/electric strike.png';
+            const electricStrike = new Sprite({
+              position: {
+                x: this.position.x + (this.isEnemy ? 0 : 60),
+                y: this.position.y + (this.isEnemy ? 0 : 60),
+              },
+              image: electricStrikeImage,
+              frames: {
+                max: 4,
+                hold: 10,
+              },
+              animate: true,
+              rotation,
+              scaleHeight: 2,
+              scaleWidth: 2,
+            });
+
+            renderedSprites.splice(1, 0, electricStrike);
+
+            gsap.to(electricStrike.position, { // выбор точки полёта проджектайла (враг)
+              x: recipient.position.x + (this.isEnemy ? 0 : 40),
+              y: recipient.position.y + (this.isEnemy ? 0 : 40),
+              onComplete: () => {
+                // Враг получает удар
+                audio.fireballHit.play(); // проигрывание звука при попадании
+                gsap.to(healthBar, {
+                  width: `${recipient.health}%`, // уменьшение здоровья
+                });
+
+                gsap.to(recipient.position, { // анимация нанесения удара обидчиком
+                  x: recipient.position.x + 10,
+                  yoyo: true,
+                  repeat: 5,
+                  duration: 0.08,
+                });
+
+                gsap.to(recipient, { // анимация получается удара жертвой
+                  opacity: 0,
+                  repeat: 5,
+                  yoyo: true,
+                  duration: 0.08,
+                });
+                renderedSprites.splice(1, 1);
+              },
+            });
+          },
+        });
+
+        const vibrationTimeline = gsap.timeline({
+          repeat: 2,
+          yoyo: true,
+          onComplete: () => {
+            vibrationTimeline.kill();
+          },
+        });
+
+        vibrationTimeline.to(this.position, {
+          x: '-=10',
+          y: '-=10',
+          duration: 0.1,
+        });
+
+        vibrationTimeline.to(this.position, {
+          x: '+=20',
+          y: '+=20',
+          duration: 0.1,
+        });
+        break;
+      }
+      case 'TheDust': {
+        const TheDustImage = new Image();
+        TheDustImage.src = './assets/newImages/maximba/thedust.png';
+        const TheDust = new Sprite({
+          position: {
+            x: recipient.position.x,
+            y: recipient.position.y,
+          },
+          image: TheDustImage,
+          frames: {
+            max: 4,
+            hold: 10,
+          },
+          animate: true,
+          scaleHeight: 3, // Уменьшаем размер
+          scaleWidth: 3, // уменьшаем размер
+        });
+        renderedSprites.push(TheDust);
+
+        // Сохраняем начальную позицию
+        const initialPosition = { x: this.position.x, y: this.position.y };
+
+        const timeline = gsap.timeline({
+          onComplete: () => {
+            // Враг получает удар
+            audio.tackleHit.play(); // проигрывание звука при попадани
+            gsap.to(healthBar, {
+              width: `${recipient.health}%`, // уменьшение здоровья
+            });
+
+            gsap.to(recipient.position, { // анимация нанесения удара обидчиком
+              x: recipient.position.x + 10,
+              yoyo: true,
+              repeat: 5,
+              duration: 0.08,
+            });
+
+            gsap.to(recipient, {// анимация получения удара жертвой
+              opacity: 0,
+              repeat: 5,
+              yoyo: true,
+              duration: 0.08,
+            });
+
+            // Удаляем спрайт удара после завершения анимации
+            renderedSprites.splice(renderedSprites.indexOf(TheDust), 1);
+          },
+        });
+
+        let movementDistance = 80;
+        if (this.isEnemy) {
+          movementDistance = -80;
+        }
+
+        timeline.to(this.position, {
+          x: this.position.x - movementDistance * 6,
+          y: this.position.y + movementDistance * 2,
+          duration: 0.5,
+        });
+
+        timeline.to(this.position, {
+          x: this.position.x,
+          y: this.position.y,
+          duration: 0.2,
+          onStart: () => {
+            gsap.to(TheDust.position, {
+              y: recipient.position.y + 50,
+
+              duration: 0.3,
+            });
+          },
+          onComplete: () => {
+            gsap.to(this.position, {
+              x: initialPosition.x,
+              duration: 0.5,
+            });
+          },
+        });
+
+        break;
+      }
       default:
         console.log('Что-то не так');
     }
@@ -1041,88 +1233,3 @@ class Boundary {
 }
 
 export { Sprite, Boundary, Monster };
-
-/*
-
-Очень классная реализация анимации вылетающего на бегу снаряда
-
-case 'java_Slash': {
-  const timeline = gsap.timeline({
-    onComplete: () => {
-      // Враг получает удар
-      audio.tackleHit.play(); // проигрывание звука при попадании
-      gsap.to(healthBar, {
-        width: `${recipient.health}%`, // уменьшение здоровья
-      });
-
-      gsap.to(recipient.position, { // анимация нанесения удара обидчиком
-        x: recipient.position.x + 10,
-        yoyo: true,
-        repeat: 5,
-        duration: 0.08,
-      });
-
-      gsap.to(recipient, { // анимация получения удара жертвой
-        opacity: 0,
-        repeat: 5,
-        yoyo: true,
-        duration: 0.08,
-      });
-    },
-  });
-
-  let movementDistance = 80;
-  if (this.isEnemy) {
-    movementDistance = -80;
-  }
-
-  // Жабка берет разгон
-  timeline.to(this.position, {
-    x: this.position.x - movementDistance * 6,
-    y: this.position.y + movementDistance * 2,
-    duration: 0.5,
-  });
-
-  // Жабка бежит на стартовую позицию и наносит удар
-  timeline.to(this.position, {
-    x: this.position.x,
-    y: this.position.y,
-    duration: 0.2,
-    onStart: () => {
-      // Создаем спрайт удара
-      const javaSlashImage = new Image();
-      javaSlashImage.src = './assets/newImages/jabba script/java slash.png';
-      const javaSlash = new Sprite({
-        position: {
-          x: this.position.x,
-          y: this.position.y,
-        },
-        image: javaSlashImage,
-        frames: {
-          max: 4,
-          hold: 10,
-        },
-        animate: true,
-        rotation,
-        scaleHeight: 5,
-        scaleWidth: 5,
-      });
-
-      // Добавляем спрайт удара
-      renderedSprites.splice(1, 0, javaSlash);
-
-      // Анимация удара
-      gsap.to(javaSlash.position, {
-        x: recipient.position.x,
-        y: recipient.position.y,
-        duration: 0.3,
-        onComplete: () => {
-          renderedSprites.splice(1, 1); // Удаляем спрайт удара после завершения
-        },
-      });
-    },
-  });
-
-  break;
-}
-*/
