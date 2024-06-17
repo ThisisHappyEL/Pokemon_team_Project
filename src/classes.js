@@ -385,6 +385,20 @@ class Monster extends Sprite {
               scaleWidth: 5,
             });
 
+            gsap.to(recipient.position, { // анимация нанесения удара обидчиком
+              x: recipient.position.x + 10,
+              yoyo: true,
+              repeat: 5,
+              duration: 0.08,
+            });
+
+            gsap.to(recipient, { // анимация получения удара жертвой
+              opacity: 0,
+              repeat: 5,
+              yoyo: true,
+              duration: 0.08,
+            });
+
             // Добавляем спрайт javaSlash
             renderedSprites.push(javaSlash);
 
@@ -590,28 +604,10 @@ class Monster extends Sprite {
         break;
       }
       case 'EarthBump': {
-        const EarthBumpImage = new Image();
-        EarthBumpImage.src = './assets/newImages/muscletache/earth bump.png';
-        const EarthBump = new Sprite({
-          position: {
-            x: recipient.position.x,
-            y: recipient.position.y,
-          },
-          image: EarthBumpImage,
-          frames: {
-            max: 4,
-            hold: 10,
-          },
-          animate: true,
-          // rotation: 90, // Убираем поворот
-          scaleHeight: 3, // Уменьшаем размер
-          scaleWidth: 3, // Уменьшаем размер
-        });
-        renderedSprites.push(EarthBump);
-
         // Сохраняем начальную позицию
         const initialPosition = { x: this.position.x, y: this.position.y };
 
+        // Основной таймлайн для анимации
         const timeline = gsap.timeline({
           onComplete: () => {
             // Враг получает удар
@@ -633,9 +629,6 @@ class Monster extends Sprite {
               yoyo: true,
               duration: 0.08,
             });
-
-            // Удаляем спрайт удара после завершения анимации
-            renderedSprites.splice(renderedSprites.indexOf(EarthBump), 1);
           },
         });
 
@@ -654,17 +647,39 @@ class Monster extends Sprite {
           x: this.position.x,
           y: this.position.y,
           duration: 0.2,
-          onStart: () => {
-            gsap.to(EarthBump.position, {
-              y: recipient.position.y + 50,
-
-              duration: 0.3,
-            });
-          },
           onComplete: () => {
-            gsap.to(this.position, {
-              x: initialPosition.x,
-              duration: 0.5,
+            const EarthBumpImage = new Image();
+            EarthBumpImage.src = './assets/newImages/muscletache/earth bump.png';
+            const EarthBump = new Sprite({
+              position: {
+                x: recipient.position.x,
+                y: recipient.position.y - 1000, // начальная позиция выше
+              },
+              image: EarthBumpImage,
+              frames: {
+                max: 4,
+                hold: 10,
+              },
+              animate: true,
+              scaleHeight: 3, // Уменьшаем размер
+              scaleWidth: 3, // Уменьшаем размер
+            });
+            renderedSprites.push(EarthBump);
+
+            const earthBumpTimeline = gsap.timeline({
+              onComplete: () => {
+                // Удаляем спрайт удара после завершения анимации
+                renderedSprites.splice(renderedSprites.indexOf(EarthBump), 1);
+                gsap.to(this.position, {
+                  x: initialPosition.x,
+                  duration: 0.5,
+                });
+              }
+            });
+
+            earthBumpTimeline.to(EarthBump.position, {
+              y: recipient.position.y + 50,
+              duration: 0.2, // быстрее
             });
           },
         });
@@ -725,6 +740,20 @@ class Monster extends Sprite {
               },
             });
           },
+        });
+
+        gsap.to(recipient.position, { // анимация нанесения удара обидчиком
+          x: recipient.position.x + 10,
+          yoyo: true,
+          repeat: 5,
+          duration: 0.08,
+        });
+
+        gsap.to(recipient, { // анимация получения удара жертвой
+          opacity: 0,
+          repeat: 5,
+          yoyo: true,
+          duration: 0.08,
         });
 
         timeline.to(this.position, {
@@ -1035,6 +1064,20 @@ class Monster extends Sprite {
               animate: true,
               scaleHeight: 5,
               scaleWidth: 5,
+            });
+
+            gsap.to(recipient.position, { // анимация нанесения удара обидчиком
+              x: recipient.position.x + 10,
+              yoyo: true,
+              repeat: 5,
+              duration: 0.08,
+            });
+
+            gsap.to(recipient, { // анимация получения удара жертвой
+              opacity: 0,
+              repeat: 5,
+              yoyo: true,
+              duration: 0.08,
             });
 
             // Добавляем спрайт slash
