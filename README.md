@@ -17,3 +17,7 @@
 ### We tried to capture the way the Pokemon series of games used to be played on older Nintendo consoles.
 
 ### This project features some unique monsters, tunes, and terrible beginner code thrown into a lake of classes, integrating JS into HTML and CSS, and working with a fairly solidly structured (by our standards) project
+
+<div align="center">
+  <img src="https://github.com/ThisisHappyEL/Pokemon_team_Project/blob/main/assets/allCollect.gif" alt="Toad Gif">
+</div>
