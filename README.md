@@ -3,7 +3,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/71b5a7b84c9174c26010/maintainability)](https://codeclimate.com/github/ThisisHappyEL/Pocemon_team_Project/maintainability)
 
 <div align="center">
-  <img src="https://github.com/ThisisHappyEL/Pokemon_team_Project/blob/main/assets/toad.gif" alt="Toad Gif">
+  <img src="(https://github.com/ThisisHappyEL/Pokemon_team_Project/blob/main/assets/JabbaScript.gif)" alt="Toad Gif">
 </div>
 
 ## What this repository contains is a team project by a group of 5 students at Hexlet College.
