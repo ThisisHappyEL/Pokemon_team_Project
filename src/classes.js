@@ -413,11 +413,11 @@ class Monster extends Sprite {
       case 'FireBolt': {
         const initialPosition = { x: this.position.x, y: this.position.y };
         rotation = this.isEnemy ? 3 : 0;
+        audio.firebolt.play();
 
         const timeline = gsap.timeline({
           onComplete: () => {
             // Враг получает удар
-            audio.tackleHit.play(); // проигрывание звука при попадании
             gsap.to(healthBar, {
               width: `${recipient.health}%`, // уменьшение здоровья
             });
@@ -513,11 +513,10 @@ class Monster extends Sprite {
       }
       case 'IcyArrow': {
         rotation = this.isEnemy ? 3 : 0;
+        audio.icearrow.play();
 
         const timeline = gsap.timeline({
           onComplete: () => {
-            // Враг получает удар
-            audio.tackleHit.play(); // проигрывание звука при попадании
             gsap.to(healthBar, {
               width: `${recipient.health}%`, // уменьшение здоровья
             });
@@ -799,13 +798,13 @@ class Monster extends Sprite {
 
         const timeline = gsap.timeline({
           onComplete: () => {
+            audio.lightningbolt.play();
             // Анимация движения Lightningbolt к врагу
             gsap.to(Lightningbolt.position, {
               x: recipient.position.x + (this.isEnemy ? 0 : 0),
               y: recipient.position.y + (this.isEnemy ? -40 : 30),
               duration: 0.5,
               onComplete: () => {
-                audio.tackleHit.play(); // проигрывание звука при попадании
                 gsap.to(healthBar, {
                   width: `${recipient.health}%`, // уменьшение здоровья
                 });
@@ -1191,7 +1190,7 @@ class Monster extends Sprite {
         const timeline = gsap.timeline({
           onComplete: () => {
             // Враг получает удар
-            audio.tackleHit.play(); // проигрывание звука при попадани
+            audio.dust.play();
             gsap.to(healthBar, {
               width: `${recipient.health}%`, // уменьшение здоровья
             });

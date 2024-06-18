@@ -58,6 +58,22 @@ const audio = {
     src: './assets/Audio/newAudio/waterball/waterboll.wav',
     volume: 1,
   }),
+  dust: new Howl({
+    src: './assets/Audio/newAudio/dust/thedust.wav',
+    volume: 1,
+  }),
+  firebolt: new Howl({
+    src: './assets/Audio/newAudio/firebolt/firebolt.wav',
+    volume: 1,
+  }),
+  icearrow: new Howl({
+    src: './assets/Audio/newAudio/iceArrow/icyarrow.wav',
+    volume: 1,
+  }),
+  lightningbolt: new Howl({
+    src: './assets/Audio/newAudio/lighningbolt/lightningbolt.wav',
+    volume: 1,
+  }),
 };
 
 export default audio;
