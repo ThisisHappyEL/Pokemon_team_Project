@@ -1,5 +1,5 @@
 # Pokemon_team_Project        [![Maintainability](https://api.codeclimate.com/v1/badges/71b5a7b84c9174c26010/maintainability)](https://codeclimate.com/github/ThisisHappyEL/Pocemon_team_Project/maintainability)
-![]([https://github.com/Pokemon_team_Project/toad.gif](https://github.com/ThisisHappyEL/Pokemon_team_Project/blob/main/assets/toad.gif))
+![Toad Gif](https://github.com/Pokemon_team_Project/Pokemon_team_Project/blob/main/toad.gif?raw=true)
 ## What this repository contains is a team project by a group of 5 students at Hexlet College.
 ### The project is a browser-based game, available at this link - https://thisishappyel.github.io/Pokemon_team_Project/
 ### We tried to capture the way the Pokemon series of games used to be played on older Nintendo consoles.
