@@ -10,6 +10,10 @@
 
 ### The project is a browser-based game, available at this link - https://thisishappyel.github.io/Pokemon_team_Project/
 
+<div align="center">
+  <img src="https://github.com/ThisisHappyEL/Pokemon_team_Project/blob/main/assets/PickStage.gif" alt="Toad Gif">
+</div>
+
 ### We tried to capture the way the Pokemon series of games used to be played on older Nintendo consoles.
 
 ### This project features some unique monsters, tunes, and terrible beginner code thrown into a lake of classes, integrating JS into HTML and CSS, and working with a fairly solidly structured (by our standards) project
