@@ -42,6 +42,22 @@ const audio = {
     src: './assets/Audio/newAudio/coconutThrow/coconut_punch.wav',
     volume: 1,
   }),
+  darkArrow: new Howl({
+    src: './assets/Audio/newAudio/darkArrow/somatikaHit.wav',
+    volume: 1,
+  }),
+  frogPunch: new Howl({
+    src: './assets/Audio/newAudio/frogPunch/FrogThrow.wav',
+    volume: 1,
+  }),
+  frogThrow: new Howl({
+    src: './assets/Audio/newAudio/frogThrow/snot.wav',
+    volume: 1,
+  }),
+  waterball: new Howl({
+    src: './assets/Audio/newAudio/waterball/waterboll.wav',
+    volume: 1,
+  }),
 };
 
 export default audio;

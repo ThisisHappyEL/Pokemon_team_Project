@@ -2,7 +2,7 @@
 const attacks = {
   Lightningbolt: {
     name: 'Lightningbolt',
-    damage: 30,
+    damage: 25,
     type: 'Electric',
     color: 'yellow',
     typeIcon: {
@@ -11,7 +11,7 @@ const attacks = {
   },
   Coconut: {
     name: 'Coconut',
-    damage: 15,
+    damage: 20,
     type: 'Normal',
     color: 'black',
     typeIcon: {
@@ -29,7 +29,7 @@ const attacks = {
   },
   java_Slash: {
     name: 'java_Slash',
-    damage: 25,
+    damage: 20,
     type: 'Normal',
     color: 'black',
     typeIcon: {
@@ -38,7 +38,7 @@ const attacks = {
   },
   poisonous_Spit: {
     name: 'poisonous_Spit',
-    damage: 30,
+    damage: 25,
     type: 'Poison',
     color: 'green',
     typeIcon: {
@@ -66,7 +66,7 @@ const attacks = {
   FireBolt: {
     name: 'FireBolt',
     damage: 25,
-    type: 'Magic',
+    type: 'Fire',
     color: 'Red',
     typeIcon: {
       src: './assets/newImages/icons/fire bolt.png',
@@ -74,8 +74,8 @@ const attacks = {
   },
   IcyArrow: {
     name: 'IcyArrow',
-    damage: 15,
-    type: 'Magic',
+    damage: 20,
+    type: 'Water',
     color: 'Blue',
     typeIcon: {
       src: './assets/newImages/icons/icy arrow.png',
@@ -83,7 +83,7 @@ const attacks = {
   },
   EarthBump: {
     name: 'EarthBump',
-    damage: 10,
+    damage: 25,
     type: 'Nature',
     color: 'Brown',
     typeIcon: {
@@ -94,14 +94,14 @@ const attacks = {
     name: 'Punch',
     damage: 20,
     type: 'Normal',
-    color: 'Green',
+    color: 'Black',
     typeIcon: {
       src: './assets/newImages/icons/punch.png',
     },
   },
   ElectricStrike: {
     name: 'ElectricStrike',
-    damage: 15,
+    damage: 20,
     type: 'Electric',
     color: 'yellow',
     typeIcon: {

@@ -29,8 +29,8 @@ for (let i = 0; i < battleZonesData.length; i += 100) {
 
 const boundaries = [];
 const offset = { // стартовая позиция игрока по отношению к координатам
-  x: -125,
-  y: -85,
+  x: -100,
+  y: -350,
 };
 
 // i - индекс строки. j - индекс символа(ячейки)
@@ -55,7 +55,7 @@ const battleZones = [];
 
 battleZonesMap.forEach((row, i) => {
   row.forEach((symbol, j) => {
-    if (symbol === 2577 || symbol === 2750 || symbol === 2720 || symbol === 2656 || symbol === 2641 || symbol === 2528 || symbol === 2592 || symbol === 2705) {
+    if (symbol === 2592) {
       battleZones.push(new Boundary(
         {
           position: {
@@ -73,8 +73,8 @@ battleZonesMap.forEach((row, i) => {
 const backgroundImage = new Image();
 backgroundImage.src = './assets/newImages/map/NEWMAP.png';
 
-// const foregroundImage = new Image();
-// foregroundImage.src = './assets/Images/foreground.png';
+const foregroundImage = new Image();
+foregroundImage.src = './assets/newImages/map/foreground.png';
 
 const playerUpImage = new Image();
 playerUpImage.src = './assets/newImages/player/playerUp.png';
@@ -104,8 +104,8 @@ const player = new Sprite({
     down: playerDownImage,
     right: playerRightImage,
   },
-  scaleHeight: 1.5,
-  scaleWidth: 1.5,
+  scaleHeight: 2.5,
+  scaleWidth: 2.5,
 });
 
 const background = new Sprite({ // создание карты мира
@@ -116,20 +116,22 @@ const background = new Sprite({ // создание карты мира
   image: backgroundImage,
 });
 
-// const foreground = new Sprite({ // создание переднего плана
-//   position: {
-//     x: offset.x,
-//     y: offset.y,
-//   },
-//   image: foregroundImage,
-// });
+const foreground = new Sprite({ // создание переднего плана
+  position: {
+    x: offset.x,
+    y: offset.y,
+  },
+  image: foregroundImage,
+});
 
 const closeButton = document.querySelector('.close-button');
 const instructionWindow = document.querySelector('.instruction-window');
 
-closeButton.addEventListener('click', () => {
-  instructionWindow.style.display = 'none';
-});
+if (closeButton && instructionWindow) {
+  closeButton.addEventListener('click', () => {
+    instructionWindow.style.display = 'none';
+  });
+}
 
 const keys = { // объект нажатия кнопок. Меняется на true при нажатии
   w: {
@@ -156,7 +158,7 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
   );
 }
 // Массив с объектами, симулирующими движ.
-const movables = [background, ...boundaries, ...battleZones];
+const movables = [background, foreground, ...boundaries, ...battleZones];
 
 const battle = { // состояние инициализации битвы
   initiated: false,
@@ -175,7 +177,7 @@ function animate() { // функция, которая постоянно отр
     battleZone.draw();
   });
   player.draw(context); // отрисовка спрайта персонажа
-  // foreground.draw(context); // отриовка боевого задника
+  foreground.draw(context); // отриовка боевого задника
 
   // сегментик для остановки анимации ходьбы при срабатывании сражения
   let moving = true;
@@ -209,7 +211,7 @@ function animate() { // функция, которая постоянно отр
           rectangle2: battleZone,
         })
         && overlappingArea > (player.width * player.height) / 2
-        && Math.random() < 1 // шанс начала сражения
+        && Math.random() < 0.003 // шанс начала сражения
       ) {
         window.cancelAnimationFrame(animbationId);
 
@@ -257,8 +259,8 @@ function animate() { // функция, которая постоянно отр
           rectangle2: {
             ...boundary,
             position: {
-              x: boundary.position.x,
-              y: boundary.position.y + 2,
+              x: boundary.position.x - 4,
+              y: boundary.position.y - 4,
             },
           },
         })
@@ -287,7 +289,7 @@ function animate() { // функция, которая постоянно отр
             ...boundary,
             position: {
               x: boundary.position.x + 2,
-              y: boundary.position.y,
+              y: boundary.position.y - 20,
             },
           },
         })
@@ -314,8 +316,8 @@ function animate() { // функция, которая постоянно отр
           rectangle2: {
             ...boundary,
             position: {
-              x: boundary.position.x,
-              y: boundary.position.y - 2,
+              x: boundary.position.x - 4,
+              y: boundary.position.y - 24,
             },
           },
         })
@@ -342,8 +344,8 @@ function animate() { // функция, которая постоянно отр
           rectangle2: {
             ...boundary,
             position: {
-              x: boundary.position.x - 2,
-              y: boundary.position.y,
+              x: boundary.position.x - 20,
+              y: boundary.position.y - 20,
             },
           },
         })

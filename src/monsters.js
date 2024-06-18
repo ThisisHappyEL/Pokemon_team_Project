@@ -91,12 +91,6 @@ const allMonsters = {
 };
 
 const playerMonsters = [
-  'Somalma',
-  'Maximba',
-  'Somatika',
-  'MikhAi_L',
-  'Kelpish',
-  'Muscletache',
   'JabbaScript',
 ];
 

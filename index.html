@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="icon" href="./assets/newImages/PokemonProjectIcon.png" type="image/png">
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -27,17 +28,23 @@
       <canvas></canvas>
 
       <!-- Инструкции по управлению -->
-      <div class="instruction-window">
-        <h2>Инструкции по управлению</h2>
-        <p>Для перемещения используйте:</p>
+      <div class="instruction-window" id="instruction-window">
+        <h2>Management instructions</h2>
+        <p>To move, use:</p>
         <ul>
-          <li>Клавиши WASD</li>
-          <li>Клавиши ЦФЫВ</li>
-          <li>Стрелки на клавиатуре</li>
+          <li>Keys WASD</li>
+          <li>Keys ЦФЫВ</li>
+          <li>Arrows on the keyboard</li>
         </ul>
-        <p>Для выбора покемона и атаки используйте мышь.</p>
-        <!-- Кнопка для закрытия окошка -->
-        <button class="close-button">Закрыть</button>
+        <p>Use the mouse to select a pokémon and attack.</p>
+        <button class="close-button">Close</button>
+      </div>
+
+      <!-- Поздравление за сбор полной коллекции -->
+      <div class="completion-window" id="completion-window">
+        <h2>Congratulations!</h2>
+        <p>You've collected all the monsters!</p>
+        <button class="completion-close-button" id="completion-close-button">Close</button>
       </div>
 
       <!-- Менюшка выбора монстра -->
@@ -210,7 +217,6 @@
     <script type="module" src="src/battleZones.js"></script>
     <script type="module" src="src/attacks.js"></script>
     <script type="module" src="src/monsters.js"></script>
-    <script type="module" src="index.js"></script>
     <script type="module" src="src/battleScene.js"></script>
     <script src="src/volumeControl.js"></script>
   </body>

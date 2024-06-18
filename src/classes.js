@@ -137,7 +137,7 @@ class Monster extends Sprite {
       case 'Waterball': {
         rotation = this.isEnemy ? 3 : 0;
 
-        audio.initFireball.play(); // проигрывание звука при касте
+        audio.waterball.play(); // проигрывание звука при касте
 
         const timeline = gsap.timeline({
           onComplete: () => {
@@ -166,7 +166,6 @@ class Monster extends Sprite {
               y: recipient.position.y + (this.isEnemy ? 0 : 40),
               onComplete: () => {
                 // Враг получает удар
-                audio.fireballHit.play(); // проигрывание звука при попадании
                 gsap.to(healthBar, {
                   width: `${recipient.health}%`, // уменьшение здоровья
                 });
@@ -271,7 +270,7 @@ class Monster extends Sprite {
       case 'poisonous_Spit': {
         const timeline = gsap.timeline({
           onComplete: () => {
-            audio.initFireball.play(); // проигрывание звука при касте
+            audio.frogThrow.play(); // проигрывание звука при касте
             // Анимация прыжка завершена, запускаем анимацию плевка
             const poisonballImage = new Image(); // создание спрайта для огненного шара
             poisonballImage.src = './assets/newImages/jabba script/acid spit.png';
@@ -298,7 +297,6 @@ class Monster extends Sprite {
               y: recipient.position.y + (this.isEnemy ? 30 : 20),
               onComplete: () => {
                 // Враг получает удар
-                audio.fireballHit.play(); // проигрывание звука при попадании
                 gsap.to(healthBar, {
                   width: `${recipient.health}%`, // уменьшение здоровья
                 });
@@ -355,7 +353,7 @@ class Monster extends Sprite {
         break;
       }
       case 'java_Slash': {
-        audio.tackleHit.play(); // Проигрывание звука при атаке
+        audio.frogPunch.play(); // Проигрывание звука при атаке
         gsap.to(healthBar, {
           width: `${recipient.health}%`, // Уменьшение здоровья
         });
@@ -413,6 +411,7 @@ class Monster extends Sprite {
       }
 
       case 'FireBolt': {
+        const initialPosition = { x: this.position.x, y: this.position.y };
         rotation = this.isEnemy ? 3 : 0;
 
         const timeline = gsap.timeline({
@@ -674,7 +673,7 @@ class Monster extends Sprite {
                   x: initialPosition.x,
                   duration: 0.5,
                 });
-              }
+              },
             });
 
             earthBumpTimeline.to(EarthBump.position, {
@@ -689,7 +688,7 @@ class Monster extends Sprite {
       case 'Punch': {
         const timeline = gsap.timeline();
 
-        rotation = this.isEnemy ? 5 : 0;
+        rotation = this.isEnemy ? 0 : 0;
 
         timeline.to(this.position, {
           y: this.position.y - 200,
@@ -703,7 +702,7 @@ class Monster extends Sprite {
             PunchImage.src = './assets/newImages/muscletache/punch.png';
             const Punch = new Sprite({
               position: {
-                x: recipient.position.x + (this.isEnemy ? 40 : 0),
+                x: recipient.position.x - 20,
                 y: recipient.position.y + 100,
               },
               image: PunchImage,
@@ -722,8 +721,8 @@ class Monster extends Sprite {
             renderedSprites.push(Punch);
 
             gsap.to(Punch.position, {
-              x: recipient.position.x + (this.isEnemy ? 60 : 0),
-              y: recipient.position.y + (this.isEnemy ? 30 : 30),
+              x: recipient.position.x,
+              y: recipient.position.y,
               duration: 0.5,
               onComplete: () => {
                 renderedSprites.pop(); // Удаляем спрайт после завершения
@@ -889,7 +888,6 @@ class Monster extends Sprite {
         // Создаем анимацию движения по траектории знака бесконечности
         const timeline = gsap.timeline({
           onComplete: () => {
-            // Создаем спрайт DarkArrow
             const DarkArrowImage = new Image();
             DarkArrowImage.src = './assets/newImages/somatika/dark arrow.png';
             const DarkArrow = new Sprite({
@@ -915,7 +913,6 @@ class Monster extends Sprite {
               y: recipient.position.y,
               duration: 0.5,
               onComplete: () => {
-                audio.tackleHit.play(); // Проигрываем звук при попадании
                 gsap.to(healthBar, {
                   width: `${recipient.health}%`, // Уменьшение здоровья
                 });
@@ -958,6 +955,7 @@ class Monster extends Sprite {
           },
           ease: 'power1.inOut',
         });
+        audio.darkArrow.play();
 
         break;
       }
@@ -1096,7 +1094,7 @@ class Monster extends Sprite {
 
         audio.initFireball.play(); // проигрывание звука при касте
 
-        const timeline = gsap.timeline({
+        gsap.timeline({
           onComplete: () => {
             const electricStrikeImage = new Image(); // создание спрайта для электро страйка
             electricStrikeImage.src = './assets/newImages/mikh ai-l/electric strike.png';

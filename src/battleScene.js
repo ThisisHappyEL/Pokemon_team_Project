@@ -225,12 +225,26 @@ function initBattle() {
 
                   battle.initiated = false;
 
+                  const completionWindow = document.querySelector('#completion-window');
+                  const completionCloseButton = document.querySelector('#completion-close-button');
+
                   const enemyMonsterKey = Object.keys(allMonsters).find(
                     (key) => allMonsters[key].name === enemyMonster.name,
                   );
 
                   if (!playerMonsters.includes(enemyMonsterKey)) {
                     playerMonsters.push(enemyMonsterKey);
+                  }
+
+                  if (playerMonsters.length === 7) {
+                    if (completionWindow) {
+                      completionWindow.style.display = 'block';
+                    }
+                  }
+                  if (completionCloseButton && completionWindow) {
+                    completionCloseButton.addEventListener('click', () => {
+                      completionWindow.style.display = 'none';
+                    });
                   }
 
                   audio.map.play();
@@ -304,7 +318,7 @@ function animateBattle() {
     sprite.draw(context);
   });
 }
-
+// При необходимости отладки боёв минуя карту мира - убрать комментарии
 // initBattle();
 // animateBattle();
 
